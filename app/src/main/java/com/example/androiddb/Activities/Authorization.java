@@ -58,7 +58,7 @@ public class Authorization extends AppCompatActivity {
             return;
         }
 
-        Users user = FindUser(login, null);
+        Users user = FindUser(login);
 
         if(!CheckExistUser(user))
             return;
@@ -71,13 +71,13 @@ public class Authorization extends AppCompatActivity {
         ClearFields();
     }
 
-    private Users FindUser(String login, Users user) {
+    private Users FindUser(String login) {
         for(int i = 0; i < users.size(); i++)
         {
             if(users.get(i).getLogin().equals(login))
-                user = users.get(i);
+                return users.get(i);
         }
-        return user;
+        return null;
     }
 
     private void ClearFields() {
