@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Registration extends AppCompatActivity {
-    EditText Login, Password, Phone, Email, LastName, FirstName, MiddleName;
+    EditText Login, Password, RepeatPassword, Phone, Email, LastName, FirstName, MiddleName;
     AppDatabase database;
     UsersDao usersDao;
     List<Users> users;
@@ -32,6 +32,7 @@ public class Registration extends AppCompatActivity {
 
         Login = findViewById(R.id.edtxtLogin);
         Password = findViewById(R.id.edtxtPassword);
+        RepeatPassword = findViewById(R.id.edtxtRepeatPassword);
         Phone = findViewById(R.id.edtxtPhone);
         Email = findViewById(R.id.edtxtEmail);
         LastName = findViewById(R.id.edtxtLastName);
@@ -57,31 +58,57 @@ public class Registration extends AppCompatActivity {
 
     public void RegUser(View view)
     {
-        String[] UserAttributes = new String[]
-                {
-                        Login.getText().toString(),
-                        Password.getText().toString(),
-                        Phone.getText().toString(),
-                        Email.getText().toString(),
-                        LastName.getText().toString(),
-                        FirstName.getText().toString(),
-                        MiddleName.getText().toString(),
-                };
+        EditText[] UserAttributes = GetArrayEditTexts();
 
         if(!CheckFields(UserAttributes))
             return;
 
-        if(!CheckExcistedUser(UserAttributes[0]))
+        if(!CheckExcistedUser(UserAttributes[0].getText().toString()))
             return;
 
+        if(!CheckRepeatPassword(UserAttributes))
+            return;
+
+        AddNewUser(UserAttributes);
+
+        GoBack();
+    }
+
+    private boolean CheckRepeatPassword(EditText[] userAttributes) {
+        if(userAttributes[2].getText().toString().equals(userAttributes[1].getText().toString()))
+            return true;
+
+        Toast.makeText(this, "Введенные пароли не совпадают", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    private void GoBack() {
+        onBackPressed();
+    }
+
+    private EditText[] GetArrayEditTexts() {
+        return new EditText[]
+                    {
+                            Login,
+                            Password,
+                            RepeatPassword,
+                            Phone,
+                            Email,
+                            LastName,
+                            FirstName,
+                            MiddleName
+                    };
+    }
+
+    private void AddNewUser(EditText[] userAttributes) {
         Users user = new Users();
-        user.setLogin(Login.getText().toString());
-        user.setPassword(Password.getText().toString());
-        user.setPhone(Phone.getText().toString());
-        user.setEmail(Email.getText().toString());
-        user.setLastName(LastName.getText().toString());
-        user.setFirstName(FirstName.getText().toString());
-        user.setMiddleName(MiddleName.getText().toString());
+        user.setLogin(userAttributes[0].getText().toString());
+        user.setPassword(userAttributes[1].getText().toString());
+        user.setPhone(userAttributes[3].getText().toString());
+        user.setEmail(userAttributes[4].getText().toString());
+        user.setLastName(userAttributes[5].getText().toString());
+        user.setFirstName(userAttributes[6].getText().toString());
+        user.setMiddleName(userAttributes[7].getText().toString());
 
         Runnable AddUser = () ->
         {
@@ -95,41 +122,21 @@ public class Registration extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        onBackPressed();
     }
 
-    boolean CheckFields(String[] UserAttributes)
+    boolean CheckFields(EditText[] UserAttributes)
     {
-        String[] EmptyFields = new String[]
-                {
-                        UserAttributes[0],
-                        "Логин",
-                        UserAttributes[1],
-                        "Пароль",
-                        UserAttributes[2],
-                        "Телефон",
-                        UserAttributes[3],
-                        "Электронная почта",
-                        UserAttributes[4],
-                        "Фамилия",
-                        UserAttributes[5],
-                        "Имя",
-                        UserAttributes[6],
-                        "Отчество"
-                };
-
         StringBuilder Fields = new StringBuilder();
 
-        for(int i = 0; i < EmptyFields.length; i += 2)
+        for(int i = 0; i < UserAttributes.length; i++)
         {
-            if(!EmptyFields[i].equals(""))
+            if(!UserAttributes[i].getText().toString().equals(""))
                 continue;
 
             if(Fields.length() > 0)
                 Fields.append(", ");
 
-            Fields.append(EmptyFields[i + 1]);
+            Fields.append(UserAttributes[i].getTag().toString());
         }
 
         if(Fields.length() == 0)

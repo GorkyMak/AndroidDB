@@ -33,6 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
+                android:tag="Логин"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtLogin"/>
@@ -55,9 +56,33 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textSize="16dp"
+                android:tag="Пароль"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtPassword"/>
+
+            <TextView
+                android:id="@+id/txtRepeatPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Повтор пароля"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtxtPassword" />
+
+            <EditText
+                android:id="@+id/edtxtRepeatPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:tag="Повтор пароля"
+                android:textSize="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtRepeatPassword"/>
 
             <TextView
                 android:id="@+id/txtPhone"
@@ -69,7 +94,7 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtxtPassword" />
+                app:layout_constraintTop_toBottomOf="@+id/edtxtRepeatPassword" />
 
             <EditText
                 android:id="@+id/edtxtPhone"
@@ -77,6 +102,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textSize="16dp"
+                android:tag="Телефон"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtPhone"/>
@@ -99,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textSize="16dp"
+                android:tag="Электронная почта"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtEmail"/>
@@ -121,6 +148,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textSize="16dp"
+                android:tag="Фамилия"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtLastName"/>
@@ -143,6 +171,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textSize="16dp"
+                android:tag="Имя"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtFirstName"/>
@@ -165,6 +194,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textSize="16dp"
+                android:tag="Отчество"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtMiddleName"/>
