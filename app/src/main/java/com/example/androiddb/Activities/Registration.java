@@ -111,9 +111,8 @@ public class Registration extends AppCompatActivity {
         user.setMiddleName(userAttributes[7].getText().toString());
 
         Runnable AddUser = () ->
-        {
             usersDao.Insert(user);
-        };
+
         SecondThread = new Thread(AddUser);
         SecondThread.start();
 
@@ -128,15 +127,14 @@ public class Registration extends AppCompatActivity {
     {
         StringBuilder Fields = new StringBuilder();
 
-        for(int i = 0; i < UserAttributes.length; i++)
-        {
-            if(!UserAttributes[i].getText().toString().equals(""))
+        for (EditText userAttribute : UserAttributes) {
+            if (!userAttribute.getText().toString().equals(""))
                 continue;
 
-            if(Fields.length() > 0)
+            if (Fields.length() > 0)
                 Fields.append(", ");
 
-            Fields.append(UserAttributes[i].getTag().toString());
+            Fields.append(userAttribute.getTag().toString());
         }
 
         if(Fields.length() == 0)
