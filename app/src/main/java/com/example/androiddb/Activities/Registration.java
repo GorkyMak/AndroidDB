@@ -1,7 +1,5 @@
 package com.example.androiddb.Activities;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -15,7 +13,6 @@ import com.example.androiddb.Entities.Users.Users;
 import com.example.androiddb.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Registration extends AppCompatActivity {

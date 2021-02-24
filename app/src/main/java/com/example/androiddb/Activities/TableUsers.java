@@ -62,7 +62,7 @@ public class TableUsers extends AppCompatActivity {
                             users.get(i).getMiddleName()
                     };
 
-            for(int j = 0; j < 7; j++)
+            for(int j = 0; j < UserAttributes.length; j++)
             {
                 Context ThemeContext = new ContextThemeWrapper(this, R.style.TableTextView);
 
