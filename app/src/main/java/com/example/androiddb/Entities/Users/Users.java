@@ -16,6 +16,17 @@ public class Users {
     String FirstName;
     String MiddleName;
 
+    public Users(@NonNull String login, String password, String phone, String email, String lastName,
+                 String firstName, String middleName) {
+        this.setLogin(login);
+        this.setPassword(password);
+        this.setPhone(phone);
+        this.setEmail(email);
+        this.setLastName(lastName);
+        this.setFirstName(firstName);
+        this.setMiddleName(middleName);
+    }
+
     public String getLogin() {
         return Login;
     }

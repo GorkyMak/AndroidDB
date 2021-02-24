@@ -31,12 +31,10 @@ public class Authorization extends AppCompatActivity {
         Login = findViewById(R.id.edtxtLogin);
         Password = findViewById(R.id.edtxtPassword);
 
-        Runnable InitDB= () ->
+        Runnable InitDB = () ->
         {
             database = App.getInstance().getDatabase();
             usersDao = database.usersDao();
-
-            users = usersDao.GetAll();
         };
         SecondThread = new Thread(InitDB);
         SecondThread.start();
@@ -52,10 +50,22 @@ public class Authorization extends AppCompatActivity {
 
     public void OpenForm(View view)
     {
+        Runnable GetUsers = () ->
+            users = usersDao.GetAll();
+
+        SecondThread = new Thread(GetUsers);
+        SecondThread.start();
+
         String login = Login.getText().toString(), password = Password.getText().toString();
 
         if(!CheckFields(login, password)) {
             return;
+        }
+
+        try {
+            SecondThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         Users user = FindUser(login);
@@ -63,6 +73,7 @@ public class Authorization extends AppCompatActivity {
         if(!CheckExistUser(user))
             return;
 
+        assert user != null;
         if(!CheckPassword(user, password))
             return;
 
@@ -97,7 +108,7 @@ public class Authorization extends AppCompatActivity {
     {
         if(login.equals(""))
         {
-            Toast.makeText(this, password.equals("") ? "Заполните все поля" : "Заполните логин", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, password.equals("") ? "Заполните поля" : "Заполните логин", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -120,25 +131,29 @@ public class Authorization extends AppCompatActivity {
 
     void FillDB()
     {
-        Users Admin = new Users();
-        Admin.setLogin("Admin");
-        Admin.setPassword("123");
-        Admin.setPhone("7(764)059-44-98");
-        Admin.setEmail("fodatipu-5632@yopmail.com");
-        Admin.setLastName("Admin");
-        Admin.setFirstName("Admin");
-        Admin.setMiddleName("Admin");
+        Users Admin = new Users
+                (
+                        "Admin",
+                        "123",
+                        "7(764)059-44-98",
+                        "fodatipu-5632@yopmail.com",
+                        "Admin",
+                        "Admin",
+                        "Admin"
+                );
 
-        Users wer = new Users();
-        wer.setLogin("wer");
-        wer.setPassword("124");
-        wer.setPhone("1(3685)549-50-09");
-        wer.setEmail("elinnyllabe-3318@yopmail.com");
-        wer.setLastName("wer");
-        wer.setFirstName("wer");
-        wer.setMiddleName("wer");
+        Users wer = new Users
+                (
+                        "wer",
+                        "124",
+                        "1(3685)549-50-09",
+                        "elinnyllabe-3318@yopmail.com",
+                        "wer",
+                        "wer",
+                        "wer"
+                );
 
-        Runnable AddBaseUsers= () ->
+        Runnable AddBaseUsers = () ->
         {
             usersDao.Insert(Admin);
             usersDao.Insert(wer);
