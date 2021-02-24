@@ -27,6 +27,9 @@ public class Users {
         this.setMiddleName(middleName);
     }
 
+    public Users() {
+    }
+
     public String getLogin() {
         return Login;
     }

@@ -35,6 +35,8 @@ public class Authorization extends AppCompatActivity {
         {
             database = App.getInstance().getDatabase();
             usersDao = database.usersDao();
+
+            users = usersDao.GetAll();
         };
         SecondThread = new Thread(InitDB);
         SecondThread.start();
@@ -50,10 +52,10 @@ public class Authorization extends AppCompatActivity {
 
     public void OpenForm(View view)
     {
-        Runnable GetUsers = () ->
+        Runnable UpdateUsers = () ->
             users = usersDao.GetAll();
 
-        SecondThread = new Thread(GetUsers);
+        SecondThread = new Thread(UpdateUsers);
         SecondThread.start();
 
         String login = Login.getText().toString(), password = Password.getText().toString();
