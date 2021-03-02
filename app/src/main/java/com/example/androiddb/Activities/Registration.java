@@ -17,7 +17,6 @@ import java.util.List;
 
 public class Registration extends AppCompatActivity {
     EditText Login, Password, RepeatPassword, Phone, Email, LastName, FirstName, MiddleName;
-    EditText[] UserAttributes = new EditText[8];
     AppDatabase database;
     UsersDao usersDao;
     List<Users> users;
@@ -56,22 +55,49 @@ public class Registration extends AppCompatActivity {
 
     public void RegUser(View view)
     {
-        if(!CheckFields())
+        String[] UserAttributes = new String[]
+            {
+                    Login.getText().toString(),
+                    Login.getTag().toString(),
+
+                    Password.getText().toString(),
+                    Password.getTag().toString(),
+
+                    RepeatPassword.getText().toString(),
+                    RepeatPassword.getTag().toString(),
+
+                    Phone.getText().toString(),
+                    Phone.getTag().toString(),
+
+                    Email.getText().toString(),
+                    Email.getTag().toString(),
+
+                    LastName.getText().toString(),
+                    LastName.getTag().toString(),
+
+                    FirstName.getText().toString(),
+                    FirstName.getTag().toString(),
+
+                    MiddleName.getText().toString(),
+                    MiddleName.getTag().toString()
+            };
+
+        if(!CheckFields(UserAttributes))
             return;
 
-        if(!CheckExcistedUser(Login.getText().toString()))
+        if(!CheckExcistedUser(UserAttributes[0]))
             return;
 
-        if(!CheckRepeatPassword())
+        if(!CheckRepeatPassword(UserAttributes[1], UserAttributes[2]))
             return;
 
-        AddNewUser();
+        AddNewUser(UserAttributes);
 
         GoBack();
     }
 
-    private boolean CheckRepeatPassword() {
-        if(RepeatPassword.getText().toString().equals(Password.getText().toString()))
+    private boolean CheckRepeatPassword(String password, String repeatPassword) {
+        if(repeatPassword.equals(password))
             return true;
 
         Toast.makeText(this, "Введенные пароли не совпадают", Toast.LENGTH_SHORT).show();
@@ -82,15 +108,17 @@ public class Registration extends AppCompatActivity {
         onBackPressed();
     }
 
-    private void AddNewUser() {
-        Users user = new Users();
-        user.setLogin(Login.getText().toString());
-        user.setPassword(Password.getText().toString());
-        user.setPhone(Phone.getText().toString());
-        user.setEmail(Email.getText().toString());
-        user.setLastName(LastName.getText().toString());
-        user.setFirstName(FirstName.getText().toString());
-        user.setMiddleName(MiddleName.getText().toString());
+    private void AddNewUser(String[] UserAttributes) {
+        Users user = new Users
+                (
+                        UserAttributes[0],
+                        UserAttributes[1],
+                        UserAttributes[3],
+                        UserAttributes[4],
+                        UserAttributes[5],
+                        UserAttributes[6],
+                        UserAttributes[7]
+                );
 
         Runnable AddUser = () ->
             usersDao.Insert(user);
@@ -105,30 +133,18 @@ public class Registration extends AppCompatActivity {
         }
     }
 
-    boolean CheckFields()
+    boolean CheckFields(String[] UserAttributes)
     {
-        EditText[] UserAttributes = new EditText[]
-                {
-                        Login,
-                        Password,
-                        RepeatPassword,
-                        Phone,
-                        Email,
-                        LastName,
-                        FirstName,
-                        MiddleName
-                };
-
         StringBuilder Fields = new StringBuilder();
 
-        for (EditText userAttribute : UserAttributes) {
-            if (!userAttribute.getText().toString().equals(""))
+        for (int i = 0; i < UserAttributes.length; i += 2) {
+            if (!UserAttributes[i].equals(""))
                 continue;
 
             if (Fields.length() > 0)
                 Fields.append(", ");
 
-            Fields.append(userAttribute.getTag().toString());
+            Fields.append(UserAttributes[i+1]);
         }
 
         if(Fields.length() == 0)
