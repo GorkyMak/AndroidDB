@@ -50,6 +50,12 @@ public class Authorization extends AppCompatActivity {
         CheckDB();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ClearFields();
+    }
+
     public void OpenForm(View view)
     {
         Runnable UpdateUsers = () ->
@@ -81,7 +87,6 @@ public class Authorization extends AppCompatActivity {
 
         LogIn(login);
 
-        ClearFields();
     }
 
     private Users FindUser(String login) {

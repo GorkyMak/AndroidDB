@@ -58,28 +58,28 @@ public class Registration extends AppCompatActivity {
         String[] UserAttributes = new String[]
             {
                     Login.getText().toString(),
-                    Login.getTag().toString(),
+                    Login.getHint().toString(),
 
                     Password.getText().toString(),
-                    Password.getTag().toString(),
+                    Password.getHint().toString(),
 
                     RepeatPassword.getText().toString(),
-                    RepeatPassword.getTag().toString(),
+                    RepeatPassword.getHint().toString(),
 
                     Phone.getText().toString(),
-                    Phone.getTag().toString(),
+                    Phone.getHint().toString(),
 
                     Email.getText().toString(),
-                    Email.getTag().toString(),
+                    Email.getHint().toString(),
 
                     LastName.getText().toString(),
-                    LastName.getTag().toString(),
+                    LastName.getHint().toString(),
 
                     FirstName.getText().toString(),
-                    FirstName.getTag().toString(),
+                    FirstName.getHint().toString(),
 
                     MiddleName.getText().toString(),
-                    MiddleName.getTag().toString()
+                    MiddleName.getHint().toString()
             };
 
         if(!CheckFields(UserAttributes))

@@ -6,55 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Authorization">
 
-    <TextView
-        android:id="@+id/txtLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Логин"
-        android:textColor="@color/black"
-        android:textSize="16dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/edtxtLogin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/edtxtLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
+        android:textSize="16sp"
+        android:hint="Логин"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtLogin"/>
-
-    <TextView
-        android:id="@+id/txtPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Пароль"
-        android:textSize="16dp"
-        android:textColor="@color/black"
-        android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtxtLogin" />
+        app:layout_constraintBottom_toTopOf="@+id/edtxtPassword"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
         android:id="@+id/edtxtPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:textSize="16dp"
+        android:textSize="16sp"
+        android:hint="Пароль"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword"/>
+        app:layout_constraintTop_toBottomOf="@+id/edtxtLogin"/>
 
     <Button
         android:id="@+id/btnOpenForm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:text="Войти"
         android:onClick="OpenForm"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -65,7 +43,7 @@
         android:id="@+id/btnOpenReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:onClick="OpenReg"
         android:text="Зарегистрироваться"
         app:layout_constraintLeft_toLeftOf="parent"
