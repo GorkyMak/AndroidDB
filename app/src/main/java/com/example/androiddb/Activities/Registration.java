@@ -17,6 +17,7 @@ import java.util.List;
 
 public class Registration extends AppCompatActivity {
     EditText Login, Password, RepeatPassword, Phone, Email, LastName, FirstName, MiddleName;
+    EditText[] UserAttributes = new EditText[8];
     AppDatabase database;
     UsersDao usersDao;
     List<Users> users;
@@ -55,24 +56,22 @@ public class Registration extends AppCompatActivity {
 
     public void RegUser(View view)
     {
-        EditText[] UserAttributes = GetArrayEditTexts();
-
-        if(!CheckFields(UserAttributes))
+        if(!CheckFields())
             return;
 
-        if(!CheckExcistedUser(UserAttributes[0].getText().toString()))
+        if(!CheckExcistedUser(Login.getText().toString()))
             return;
 
-        if(!CheckRepeatPassword(UserAttributes))
+        if(!CheckRepeatPassword())
             return;
 
-        AddNewUser(UserAttributes);
+        AddNewUser();
 
         GoBack();
     }
 
-    private boolean CheckRepeatPassword(EditText[] userAttributes) {
-        if(userAttributes[2].getText().toString().equals(userAttributes[1].getText().toString()))
+    private boolean CheckRepeatPassword() {
+        if(RepeatPassword.getText().toString().equals(Password.getText().toString()))
             return true;
 
         Toast.makeText(this, "Введенные пароли не совпадают", Toast.LENGTH_SHORT).show();
@@ -83,29 +82,15 @@ public class Registration extends AppCompatActivity {
         onBackPressed();
     }
 
-    private EditText[] GetArrayEditTexts() {
-        return new EditText[]
-                    {
-                            Login,
-                            Password,
-                            RepeatPassword,
-                            Phone,
-                            Email,
-                            LastName,
-                            FirstName,
-                            MiddleName
-                    };
-    }
-
-    private void AddNewUser(EditText[] userAttributes) {
+    private void AddNewUser() {
         Users user = new Users();
-        user.setLogin(userAttributes[0].getText().toString());
-        user.setPassword(userAttributes[1].getText().toString());
-        user.setPhone(userAttributes[3].getText().toString());
-        user.setEmail(userAttributes[4].getText().toString());
-        user.setLastName(userAttributes[5].getText().toString());
-        user.setFirstName(userAttributes[6].getText().toString());
-        user.setMiddleName(userAttributes[7].getText().toString());
+        user.setLogin(Login.getText().toString());
+        user.setPassword(Password.getText().toString());
+        user.setPhone(Phone.getText().toString());
+        user.setEmail(Email.getText().toString());
+        user.setLastName(LastName.getText().toString());
+        user.setFirstName(FirstName.getText().toString());
+        user.setMiddleName(MiddleName.getText().toString());
 
         Runnable AddUser = () ->
             usersDao.Insert(user);
@@ -120,8 +105,20 @@ public class Registration extends AppCompatActivity {
         }
     }
 
-    boolean CheckFields(EditText[] UserAttributes)
+    boolean CheckFields()
     {
+        EditText[] UserAttributes = new EditText[]
+                {
+                        Login,
+                        Password,
+                        RepeatPassword,
+                        Phone,
+                        Email,
+                        LastName,
+                        FirstName,
+                        MiddleName
+                };
+
         StringBuilder Fields = new StringBuilder();
 
         for (EditText userAttribute : UserAttributes) {
