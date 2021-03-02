@@ -88,7 +88,7 @@ public class Registration extends AppCompatActivity {
         if(!CheckExcistedUser(UserAttributes[0]))
             return;
 
-        if(!CheckRepeatPassword(UserAttributes[1], UserAttributes[2]))
+        if(!CheckRepeatPassword(UserAttributes[2], UserAttributes[4]))
             return;
 
         AddNewUser(UserAttributes);
@@ -112,12 +112,12 @@ public class Registration extends AppCompatActivity {
         Users user = new Users
                 (
                         UserAttributes[0],
-                        UserAttributes[1],
-                        UserAttributes[3],
-                        UserAttributes[4],
-                        UserAttributes[5],
+                        UserAttributes[2],
                         UserAttributes[6],
-                        UserAttributes[7]
+                        UserAttributes[8],
+                        UserAttributes[10],
+                        UserAttributes[12],
+                        UserAttributes[14]
                 );
 
         Runnable AddUser = () ->
@@ -165,9 +165,9 @@ public class Registration extends AppCompatActivity {
     }
 
     private boolean FindUser(String login) {
-        for(int i = 0; i < users.size(); i++)
+        for(Users user : users)
         {
-            if(users.get(i).getLogin().equals(login))
+            if(user.getLogin().equals(login))
                 return true;
         }
         return false;
