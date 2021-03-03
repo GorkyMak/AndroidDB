@@ -113,7 +113,8 @@ public class Registration extends AppCompatActivity {
                         UserAttributes[8],
                         UserAttributes[10],
                         UserAttributes[12],
-                        UserAttributes[14]
+                        UserAttributes[14],
+                        "User"
                 );
 
         Runnable AddUser = () ->

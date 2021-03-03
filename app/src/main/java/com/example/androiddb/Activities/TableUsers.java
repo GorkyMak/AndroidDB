@@ -59,15 +59,15 @@ public class TableUsers extends AppCompatActivity {
                             users.get(i).getEmail(),
                             users.get(i).getLastName(),
                             users.get(i).getFirstName(),
-                            users.get(i).getMiddleName()
+                            users.get(i).getMiddleName(),
+                            users.get(i).getRole()
                     };
 
-            for(int j = 0; j < UserAttributes.length; j++)
-            {
+            for (String userAttribute : UserAttributes) {
                 Context ThemeContext = new ContextThemeWrapper(this, R.style.TableTextView);
 
                 TextView UserAttribute = new TextView(ThemeContext);
-                UserAttribute.setText(UserAttributes[j]);
+                UserAttribute.setText(userAttribute);
 
                 TableRow.LayoutParams layoutParams = new TableRow.LayoutParams
                         (
@@ -75,7 +75,7 @@ public class TableUsers extends AppCompatActivity {
                                 TableRow.LayoutParams.WRAP_CONTENT,
                                 1
                         );
-                layoutParams.setMargins(5,5,5,5);
+                layoutParams.setMargins(5, 5, 5, 5);
 
                 UserAttribute.setLayoutParams(layoutParams);
                 row.addView(UserAttribute);

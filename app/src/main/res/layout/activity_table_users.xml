@@ -58,6 +58,11 @@
                         style="@style/TableTextView"
                         android:textStyle="bold"
                         android:text="Отчество"/>
+
+                    <TextView
+                        style="@style/TableTextView"
+                        android:textStyle="bold"
+                        android:text="Роль"/>
                 </TableRow>
 
             </TableLayout>

@@ -135,6 +135,7 @@ public class Authorization extends AppCompatActivity {
                         "fodatipu-5632@yopmail.com",
                         "Admin",
                         "Admin",
+                        "Admin",
                         "Admin"
                 );
 
@@ -146,7 +147,8 @@ public class Authorization extends AppCompatActivity {
                         "elinnyllabe-3318@yopmail.com",
                         "wer",
                         "wer",
-                        "wer"
+                        "wer",
+                        "User"
                 );
 
         Runnable AddBaseUsers = () ->

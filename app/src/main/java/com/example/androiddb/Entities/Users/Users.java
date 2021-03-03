@@ -15,9 +15,10 @@ public class Users {
     String LastName;
     String FirstName;
     String MiddleName;
+    String Role;
 
     public Users(@NonNull String login, String password, String phone, String email, String lastName,
-                 String firstName, String middleName) {
+                 String firstName, String middleName, String role) {
         this.setLogin(login);
         this.setPassword(password);
         this.setPhone(phone);
@@ -25,6 +26,7 @@ public class Users {
         this.setLastName(lastName);
         this.setFirstName(firstName);
         this.setMiddleName(middleName);
+        this.setRole(role);
     }
 
     public Users() {
@@ -84,5 +86,13 @@ public class Users {
 
     public void setMiddleName(String middleName) {
         MiddleName = middleName;
+    }
+
+    public String getRole() {
+        return Role;
+    }
+
+    public void setRole(String role) {
+        Role = role;
     }
 }
