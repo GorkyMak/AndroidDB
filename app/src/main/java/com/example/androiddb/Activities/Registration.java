@@ -13,8 +13,6 @@ import com.example.androiddb.Entities.Users.Users;
 import com.example.androiddb.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
-import java.util.List;
-
 public class Registration extends AppCompatActivity {
     EditText Login, Password, RepeatPassword, Phone, Email, LastName, FirstName, MiddleName;
     AppDatabase database;
@@ -83,7 +81,7 @@ public class Registration extends AppCompatActivity {
         if(!CheckFields(UserAttributes))
             return;
 
-        if(!CheckExcistedUser(UserAttributes[0]))
+        if(!CheckExcistedUser())
             return;
 
         if(!CheckRepeatPassword(UserAttributes[2], UserAttributes[4]))
@@ -148,9 +146,8 @@ public class Registration extends AppCompatActivity {
         if(Fields.length() == 0)
         {
             Runnable InitDB = () ->
-            {
                 users = usersDao.GetByLogin(UserAttributes[0]);
-            };
+
             SecondThread = new Thread(InitDB);
             SecondThread.start();
             return true;
@@ -160,9 +157,9 @@ public class Registration extends AppCompatActivity {
         return false;
     }
 
-    boolean CheckExcistedUser(String login)
+    boolean CheckExcistedUser()
     {
-        if(!FindUser(login))
+        if(!FindUser())
             return true;
 
         Toast.makeText(this, "Пользователь с таким логином уже существует",
@@ -170,16 +167,13 @@ public class Registration extends AppCompatActivity {
         return false;
     }
 
-    private boolean FindUser(String login) {
+    private boolean FindUser() {
         try {
             SecondThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        if(users != null)
-            return true;
-
-        return false;
+        return users != null;
     }
 }
