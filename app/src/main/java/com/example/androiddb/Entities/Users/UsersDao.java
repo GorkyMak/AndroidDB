@@ -15,6 +15,9 @@ public interface UsersDao {
     @Query("Select * from Users Where Login = :Login")
     Users GetByLogin(String Login);
 
+    @Query("Select Count(*) from Users")
+    int GetCount();
+
     @Insert
     void Insert(Users users);
 

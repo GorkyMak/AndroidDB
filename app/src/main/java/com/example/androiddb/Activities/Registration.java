@@ -19,7 +19,7 @@ public class Registration extends AppCompatActivity {
     EditText Login, Password, RepeatPassword, Phone, Email, LastName, FirstName, MiddleName;
     AppDatabase database;
     UsersDao usersDao;
-    List<Users> users;
+    Users users;
     Thread SecondThread;
 
     @Override
@@ -40,8 +40,6 @@ public class Registration extends AppCompatActivity {
         {
             database = App.getInstance().getDatabase();
             usersDao = database.usersDao();
-
-            users = usersDao.GetAll();
         };
         SecondThread = new Thread(InitDB);
         SecondThread.start();
@@ -148,7 +146,15 @@ public class Registration extends AppCompatActivity {
         }
 
         if(Fields.length() == 0)
+        {
+            Runnable InitDB = () ->
+            {
+                users = usersDao.GetByLogin(UserAttributes[0]);
+            };
+            SecondThread = new Thread(InitDB);
+            SecondThread.start();
             return true;
+        }
 
         Toast.makeText(this, "Заполните поля: " + Fields, Toast.LENGTH_SHORT).show();
         return false;
@@ -165,11 +171,15 @@ public class Registration extends AppCompatActivity {
     }
 
     private boolean FindUser(String login) {
-        for(Users user : users)
-        {
-            if(user.getLogin().equals(login))
-                return true;
+        try {
+            SecondThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+        if(users != null)
+            return true;
+
         return false;
     }
 }

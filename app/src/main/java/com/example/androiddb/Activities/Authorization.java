@@ -21,7 +21,8 @@ public class Authorization extends AppCompatActivity {
     AppDatabase database;
     UsersDao usersDao;
     Thread SecondThread;
-    List<Users> users;
+    Users user;
+    int CountRecords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class Authorization extends AppCompatActivity {
             database = App.getInstance().getDatabase();
             usersDao = database.usersDao();
 
-            users = usersDao.GetAll();
+            CountRecords = usersDao.GetCount();
         };
         SecondThread = new Thread(InitDB);
         SecondThread.start();
@@ -58,17 +59,17 @@ public class Authorization extends AppCompatActivity {
 
     public void OpenForm(View view)
     {
-        Runnable UpdateUsers = () ->
-            users = usersDao.GetAll();
-
-        SecondThread = new Thread(UpdateUsers);
-        SecondThread.start();
-
         String login = Login.getText().toString(), password = Password.getText().toString();
 
         if(!CheckFields(login, password)) {
             return;
         }
+
+        Runnable UpdateUsers = () ->
+            user = usersDao.GetByLogin(login);
+
+        SecondThread = new Thread(UpdateUsers);
+        SecondThread.start();
 
         try {
             SecondThread.join();
@@ -76,26 +77,14 @@ public class Authorization extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Users user = FindUser(login);
-
         if(!CheckExistUser(user))
             return;
 
-        assert user != null;
-        if(!CheckPassword(user, password))
+        if(!CheckPassword(user.getPassword(), password))
             return;
 
         LogIn(login);
 
-    }
-
-    private Users FindUser(String login) {
-        for(int i = 0; i < users.size(); i++)
-        {
-            if(users.get(i).getLogin().equals(login))
-                return users.get(i);
-        }
-        return null;
     }
 
     private void ClearFields() {
@@ -130,7 +119,7 @@ public class Authorization extends AppCompatActivity {
 
     void CheckDB()
     {
-        if(users.size() > 0)
+        if(CountRecords > 0)
             return;
 
         FillDB();
@@ -184,9 +173,9 @@ public class Authorization extends AppCompatActivity {
         return false;
     }
 
-    boolean CheckPassword(Users user, String password)
+    boolean CheckPassword(String userPassword, String password)
     {
-        if(user.getPassword().equals(password))
+        if(userPassword.equals(password))
             return true;
 
         Toast.makeText(this, "Неверный пароль", Toast.LENGTH_LONG).show();
