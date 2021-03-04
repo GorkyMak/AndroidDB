@@ -28,14 +28,19 @@ public class GeneralUserData extends AppCompatActivity {
 
         CountUsers = findViewById(R.id.txtCountUsers);
 
-        Runnable InitDB = () ->
+        InitDB();
+
+        CountUsers.setText(MessageFormat.format("{0}{1}", CountUsers.getText(), String.valueOf(users.size()) ));
+    }
+
+    private void InitDB() {
+        SecondThread = new Thread(() ->
         {
             database = App.getInstance().getDatabase();
             usersDao = database.usersDao();
 
             users = usersDao.GetAll();
-        };
-        SecondThread = new Thread(InitDB);
+        });
         SecondThread.start();
 
         try {
@@ -43,7 +48,5 @@ public class GeneralUserData extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        CountUsers.setText(MessageFormat.format("{0}{1}", CountUsers.getText(), String.valueOf(users.size()) ));
     }
 }

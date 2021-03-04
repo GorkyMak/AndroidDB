@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content">
 
                 <TableRow
-                    android:background="#00CC66">
+                    android:background="@color/green_light">
                     <TextView
                         style="@style/TableTextView"
                         android:textStyle="bold"

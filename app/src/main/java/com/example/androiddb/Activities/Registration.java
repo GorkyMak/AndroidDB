@@ -34,12 +34,15 @@ public class Registration extends AppCompatActivity {
         FirstName = findViewById(R.id.edtxtFirstName);
         MiddleName = findViewById(R.id.edtxtMiddleName);
 
-        Runnable InitDB = () ->
+        initDB();
+    }
+
+    private void initDB() {
+        SecondThread = new Thread(() ->
         {
             database = App.getInstance().getDatabase();
             usersDao = database.usersDao();
-        };
-        SecondThread = new Thread(InitDB);
+        });
         SecondThread.start();
 
         try {

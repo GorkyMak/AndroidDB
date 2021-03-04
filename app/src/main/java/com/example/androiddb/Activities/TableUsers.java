@@ -31,14 +31,19 @@ public class TableUsers extends AppCompatActivity {
 
         Table = findViewById(R.id.Table);
 
-        Runnable InitDB = () ->
+        InitDB();
+
+        FillTable();
+    }
+
+    private void InitDB() {
+        SecondThread = new Thread(() ->
         {
             database = App.getInstance().getDatabase();
             usersDao = database.usersDao();
 
             users = usersDao.GetAll();
-        };
-        SecondThread = new Thread(InitDB);
+        });
         SecondThread.start();
 
         try {
@@ -46,42 +51,69 @@ public class TableUsers extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
 
+    private void FillTable() {
         for(int i = 0; i < users.size(); i++)
         {
-            TableRow row = new TableRow(this);
+            TableRow row = CreateNewRow();
 
-            String[] UserAttributes = new String[]
-                    {
-                            users.get(i).getLogin(),
-                            users.get(i).getPassword(),
-                            users.get(i).getPhone(),
-                            users.get(i).getEmail(),
-                            users.get(i).getLastName(),
-                            users.get(i).getFirstName(),
-                            users.get(i).getMiddleName(),
-                            users.get(i).getRole()
-                    };
+            String[] UserAttributes = GetUserAttributes(i);
 
-            for (String userAttribute : UserAttributes) {
-                Context ThemeContext = new ContextThemeWrapper(this, R.style.TableTextView);
-
-                TextView UserAttribute = new TextView(ThemeContext);
-                UserAttribute.setText(userAttribute);
-
-                TableRow.LayoutParams layoutParams = new TableRow.LayoutParams
-                        (
-                                TableRow.LayoutParams.WRAP_CONTENT,
-                                TableRow.LayoutParams.WRAP_CONTENT,
-                                1
-                        );
-                layoutParams.setMargins(5, 5, 5, 5);
-
-                UserAttribute.setLayoutParams(layoutParams);
-                row.addView(UserAttribute);
-            }
+            FillNewRow(UserAttributes, row);
 
             Table.addView(row);
         }
+    }
+
+    private TableRow CreateNewRow() {
+        return new TableRow(this);
+    }
+
+    private String[] GetUserAttributes(int i) {
+        return new String[]
+                        {
+                                users.get(i).getLogin(),
+                                users.get(i).getPassword(),
+                                users.get(i).getPhone(),
+                                users.get(i).getEmail(),
+                                users.get(i).getLastName(),
+                                users.get(i).getFirstName(),
+                                users.get(i).getMiddleName(),
+                                users.get(i).getRole()
+                        };
+    }
+
+    private void FillNewRow(String[] userAttributes, TableRow row) {
+        for (String userAttribute : userAttributes) {
+            Context ThemeContext = getStyle();
+
+            TextView UserAttribute = CreateTextView(ThemeContext);
+            UserAttribute.setText(userAttribute);
+
+            TableRow.LayoutParams layoutParams = getLayoutParams();
+
+            UserAttribute.setLayoutParams(layoutParams);
+            row.addView(UserAttribute);
+        }
+    }
+
+    private Context getStyle() {
+        return new ContextThemeWrapper(this, R.style.TableTextView);
+    }
+
+    private TextView CreateTextView(Context themeContext) {
+        return new TextView(themeContext);
+    }
+
+    private TableRow.LayoutParams getLayoutParams() {
+        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams
+                (
+                        TableRow.LayoutParams.WRAP_CONTENT,
+                        TableRow.LayoutParams.WRAP_CONTENT,
+                        1
+                );
+        layoutParams.setMargins(5, 5, 5, 5);
+        return layoutParams;
     }
 }

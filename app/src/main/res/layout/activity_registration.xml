@@ -20,97 +20,72 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Введите данные:"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textColor="@color/black"
                 android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/edtxtLogin"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                app:layout_constraintBottom_toTopOf="@+id/edtxtLogin" />
 
             <EditText
                 android:id="@+id/edtxtLogin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
+                style="@style/EditText"
                 android:hint="Логин"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/TVInput"/>
 
             <EditText
                 android:id="@+id/edtxtPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/EditText"
                 android:inputType="textPassword"
-                android:textSize="16sp"
                 android:hint="Пароль"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtxtLogin"/>
 
             <EditText
                 android:id="@+id/edtxtRepeatPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/EditText"
                 android:inputType="textPassword"
                 android:hint="Повтор пароля"
-                android:textSize="16sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtxtPassword"/>
 
             <EditText
                 android:id="@+id/edtxtPhone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textSize="16sp"
+                style="@style/EditText"
+                android:inputType="phone"
                 android:hint="Телефон"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtxtRepeatPassword"/>
 
             <EditText
                 android:id="@+id/edtxtEmail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/EditText"
                 android:inputType="textEmailAddress"
-                android:textSize="16sp"
                 android:hint="Электронная почта"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtxtPhone"/>
 
             <EditText
                 android:id="@+id/edtxtLastName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
+                style="@style/EditText"
                 android:hint="Фамилия"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtxtEmail"/>
 
             <EditText
                 android:id="@+id/edtxtFirstName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
+                style="@style/EditText"
                 android:hint="Имя"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtxtLastName"/>
 
 
             <EditText
                 android:id="@+id/edtxtMiddleName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
+                style="@style/EditText"
                 android:hint="Отчество"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtxtFirstName"/>
 
             <Button
@@ -118,6 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+                android:layout_marginTop="10dp"
                 android:text="Зарегистрироваться"
                 android:onClick="RegUser"
                 app:layout_constraintLeft_toLeftOf="parent"
