@@ -23,6 +23,7 @@ public class TableUsers extends AppCompatActivity {
     UsersDao usersDao;
     List<Users> users;
     Thread SecondThread;
+    TableRow.LayoutParams layoutParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,8 @@ public class TableUsers extends AppCompatActivity {
         setContentView(R.layout.activity_table_users);
 
         Table = findViewById(R.id.Table);
+
+        layoutParams = getLayoutParams();
 
         InitDB();
 
@@ -90,8 +93,6 @@ public class TableUsers extends AppCompatActivity {
 
             TextView UserAttribute = CreateTextView(ThemeContext);
             UserAttribute.setText(userAttribute);
-
-            TableRow.LayoutParams layoutParams = getLayoutParams();
 
             UserAttribute.setLayoutParams(layoutParams);
             row.addView(UserAttribute);
