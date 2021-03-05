@@ -13,9 +13,6 @@ import com.example.androiddb.Entities.Users.Users;
 import com.example.androiddb.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
-import java.lang.reflect.Field;
-import java.text.MessageFormat;
-
 public class Registration extends AppCompatActivity {
     EditText Login, Password, RepeatPassword, Phone, Email, LastName, FirstName, MiddleName;
     AppDatabase database;
