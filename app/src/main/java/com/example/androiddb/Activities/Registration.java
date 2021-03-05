@@ -13,6 +13,9 @@ import com.example.androiddb.Entities.Users.Users;
 import com.example.androiddb.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
+import java.lang.reflect.Field;
+import java.text.MessageFormat;
+
 public class Registration extends AppCompatActivity {
     EditText Login, Password, RepeatPassword, Phone, Email, LastName, FirstName, MiddleName;
     AppDatabase database;
@@ -95,44 +98,6 @@ public class Registration extends AppCompatActivity {
         GoBack();
     }
 
-    private boolean CheckRepeatPassword(String password, String repeatPassword) {
-        if(repeatPassword.equals(password))
-            return true;
-
-        Toast.makeText(this, "Введенные пароли не совпадают", Toast.LENGTH_SHORT).show();
-        return false;
-    }
-
-    private void GoBack() {
-        onBackPressed();
-    }
-
-    private void AddNewUser(String[] UserAttributes) {
-        Users user = new Users
-                (
-                        UserAttributes[0],
-                        UserAttributes[2],
-                        UserAttributes[6],
-                        UserAttributes[8],
-                        UserAttributes[10],
-                        UserAttributes[12],
-                        UserAttributes[14],
-                        "User"
-                );
-
-        Runnable AddUser = () ->
-            usersDao.Insert(user);
-
-        SecondThread = new Thread(AddUser);
-        SecondThread.start();
-
-        try {
-            SecondThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     boolean CheckFields(String[] UserAttributes)
     {
         StringBuilder Fields = new StringBuilder();
@@ -150,7 +115,7 @@ public class Registration extends AppCompatActivity {
         if(Fields.length() == 0)
         {
             Runnable InitDB = () ->
-                users = usersDao.GetByLogin(UserAttributes[0]);
+                    users = usersDao.GetByLogin(UserAttributes[0]);
 
             SecondThread = new Thread(InitDB);
             SecondThread.start();
@@ -179,5 +144,41 @@ public class Registration extends AppCompatActivity {
         }
 
         return users != null;
+    }
+
+    private boolean CheckRepeatPassword(String password, String repeatPassword) {
+        if(repeatPassword.equals(password))
+            return true;
+
+        Toast.makeText(this, "Введенные пароли не совпадают", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    private void AddNewUser(String[] UserAttributes) {
+        Users user = new Users
+                (
+                        UserAttributes[0],
+                        UserAttributes[2],
+                        UserAttributes[6],
+                        UserAttributes[8],
+                        UserAttributes[10],
+                        UserAttributes[12],
+                        UserAttributes[14],
+                        "User"
+                );
+
+        SecondThread = new Thread(() ->
+                usersDao.Insert(user));
+        SecondThread.start();
+
+        try {
+            SecondThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void GoBack() {
+        onBackPressed();
     }
 }

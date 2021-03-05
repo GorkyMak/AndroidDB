@@ -18,7 +18,7 @@ public class GeneralUserData extends AppCompatActivity {
     TextView CountUsers;
     AppDatabase database;
     UsersDao usersDao;
-    List<Users> users;
+    int CountRecords;
     Thread SecondThread;
 
     @Override
@@ -30,7 +30,7 @@ public class GeneralUserData extends AppCompatActivity {
 
         InitDB();
 
-        CountUsers.setText(MessageFormat.format("{0}{1}", CountUsers.getText(), String.valueOf(users.size()) ));
+        CountUsers.setText(MessageFormat.format("{0}{1}", CountUsers.getText(), String.valueOf(CountRecords)));
     }
 
     private void InitDB() {
@@ -39,7 +39,7 @@ public class GeneralUserData extends AppCompatActivity {
             database = App.getInstance().getDatabase();
             usersDao = database.usersDao();
 
-            users = usersDao.GetAll();
+            CountRecords = usersDao.GetCount();
         });
         SecondThread.start();
 

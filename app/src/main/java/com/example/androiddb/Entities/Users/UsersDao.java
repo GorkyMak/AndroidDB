@@ -6,24 +6,20 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.example.androiddb.Entities.BaseDao;
+
 import java.util.List;
 @Dao
-public interface UsersDao {
+public abstract class UsersDao implements BaseDao<Users> {
     @Query("Select * from Users")
-    List<Users> GetAll();
+    public abstract List<Users> GetAll();
 
     @Query("Select * from Users Where Login = :Login")
-    Users GetByLogin(String Login);
+    public abstract Users GetByLogin(String Login);
 
     @Query("Select Count(*) from Users")
-    int GetCount();
+    public abstract int GetCount();
 
-    @Insert
-    void Insert(Users users);
-
-    @Update
-    void Update(Users users);
-
-    @Delete
-    void Delete(Users users);
+    @Query("Select Count(*) from Users limit 1")
+    public abstract int GetEmptyInfo();
 }

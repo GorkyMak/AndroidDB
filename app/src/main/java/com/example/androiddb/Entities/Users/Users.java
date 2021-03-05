@@ -1,6 +1,7 @@
 package com.example.androiddb.Entities.Users;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,27 +10,22 @@ public class Users {
     @PrimaryKey
     @NonNull
     String Login;
-    String Password;
-    String Phone;
-    String Email;
-    String LastName;
-    String FirstName;
-    String MiddleName;
-    String Role;
+    String Password, Phone, Email, LastName, FirstName, MiddleName, Role;
 
-    public Users(@NonNull String login, String password, String phone, String email, String lastName,
-                 String firstName, String middleName, String role) {
-        this.setLogin(login);
-        this.setPassword(password);
-        this.setPhone(phone);
-        this.setEmail(email);
-        this.setLastName(lastName);
-        this.setFirstName(firstName);
-        this.setMiddleName(middleName);
-        this.setRole(role);
-    }
 
     public Users() {
+    }
+
+    public Users(@NonNull String login, String password, String phone, String email,
+                 String lastName, String firstName, String middleName, String role) {
+        Login = login;
+        Password = password;
+        Phone = phone;
+        Email = email;
+        LastName = lastName;
+        FirstName = firstName;
+        MiddleName = middleName;
+        Role = role;
     }
 
     public String getLogin() {
