@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androiddb.Entities.App;
+import com.example.androiddb.Entities.InstanceDB;
 import com.example.androiddb.Entities.AppDatabase;
 import com.example.androiddb.Entities.Users.UsersDao;
 import com.example.androiddb.R;
@@ -26,15 +26,15 @@ public class GeneralUserData extends AppCompatActivity {
 
         CountUsers = findViewById(R.id.txtCountUsers);
 
-        InitDB();
+        GetDB();
 
         CountUsers.setText(MessageFormat.format("{0}{1}", CountUsers.getText(), String.valueOf(CountRecords)));
     }
 
-    private void InitDB() {
+    private void GetDB() {
         DBThread = new Thread(() ->
         {
-            database = App.getInstance().getDatabase();
+            database = InstanceDB.getInstance().getDatabase();
             usersDao = database.usersDao();
 
             CountRecords = usersDao.GetCount();

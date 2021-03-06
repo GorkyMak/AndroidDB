@@ -2,12 +2,13 @@ package com.example.androiddb.Activities;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androiddb.Entities.App;
+import com.example.androiddb.Entities.InstanceDB;
 import com.example.androiddb.Entities.AppDatabase;
 import com.example.androiddb.Entities.Users.Users;
 import com.example.androiddb.Entities.Users.UsersDao;
@@ -15,6 +16,7 @@ import com.example.androiddb.R;
 
 public class Registration extends AppCompatActivity {
     EditText Login, Password, RepeatPassword, Phone, Email, LastName, FirstName, MiddleName;
+    Button Reg, Cancel;
     AppDatabase database;
     UsersDao usersDao;
     Users users;
@@ -34,13 +36,28 @@ public class Registration extends AppCompatActivity {
         FirstName = findViewById(R.id.edtxtFirstName);
         MiddleName = findViewById(R.id.edtxtMiddleName);
 
-        initDB();
+        Reg = findViewById(R.id.btnReg);
+        Cancel = findViewById(R.id.btnCancel);
+
+        GetDB();
     }
 
-    private void initDB() {
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        BlockClick();
+    }
+
+    private void BlockClick() {
+        Reg.setClickable(false);
+        Cancel.setClickable(false);
+    }
+
+    private void GetDB() {
         DBThread = new Thread(() ->
         {
-            database = App.getInstance().getDatabase();
+            database = InstanceDB.getInstance().getDatabase();
             usersDao = database.usersDao();
         });
         DBThread.start();
@@ -111,10 +128,10 @@ public class Registration extends AppCompatActivity {
 
         if(Fields.length() == 0)
         {
-            Runnable InitDB = () ->
+            Runnable GetDB = () ->
                     users = usersDao.GetByLogin(UserAttributes[0]);
 
-            DBThread = new Thread(InitDB);
+            DBThread = new Thread(GetDB);
             DBThread.start();
             return true;
         }
@@ -177,5 +194,9 @@ public class Registration extends AppCompatActivity {
 
     private void GoBack() {
         onBackPressed();
+    }
+
+    public void Cancel(View view) {
+        GoBack();
     }
 }

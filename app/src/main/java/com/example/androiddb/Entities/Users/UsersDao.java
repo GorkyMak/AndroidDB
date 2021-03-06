@@ -17,6 +17,6 @@ public abstract class UsersDao implements BaseDao<Users> {
     @Query("Select Count(*) from Users")
     public abstract int GetCount();
 
-    @Query("Select Count(*) from Users limit 1")
+    @Query("Select Count(*) from (Select * from Users limit 1) as count")
     public abstract int GetEmptyInfo();
 }

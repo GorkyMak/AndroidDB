@@ -1,6 +1,7 @@
 package com.example.androiddb.Activities;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.widget.TableLayout;
@@ -9,7 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androiddb.Entities.App;
+import com.example.androiddb.Entities.InstanceDB;
 import com.example.androiddb.Entities.AppDatabase;
 import com.example.androiddb.Entities.Users.Users;
 import com.example.androiddb.Entities.Users.UsersDao;
@@ -34,15 +35,15 @@ public class TableUsers extends AppCompatActivity {
 
         layoutParams = getLayoutParams();
 
-        InitDB();
+        GetDB();
 
         FillTable();
     }
 
-    private void InitDB() {
+    private void GetDB() {
         DBThread = new Thread(() ->
         {
-            database = App.getInstance().getDatabase();
+            database = InstanceDB.getInstance().getDatabase();
             usersDao = database.usersDao();
 
             users = usersDao.GetAll();
@@ -93,8 +94,9 @@ public class TableUsers extends AppCompatActivity {
 
             TextView UserAttribute = CreateTextView(ThemeContext);
             UserAttribute.setText(userAttribute);
-
             UserAttribute.setLayoutParams(layoutParams);
+            UserAttribute.setBackgroundColor(Color.rgb(255,255,255));
+
             row.addView(UserAttribute);
         }
     }
@@ -114,7 +116,7 @@ public class TableUsers extends AppCompatActivity {
                         TableRow.LayoutParams.WRAP_CONTENT,
                         1
                 );
-        layoutParams.setMargins(5, 5, 5, 5);
+        layoutParams.setMargins(1, 0, 1, 2);
         return layoutParams;
     }
 }

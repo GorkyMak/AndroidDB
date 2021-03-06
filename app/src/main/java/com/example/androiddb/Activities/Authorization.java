@@ -3,12 +3,13 @@ package com.example.androiddb.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androiddb.Entities.App;
+import com.example.androiddb.Entities.InstanceDB;
 import com.example.androiddb.Entities.AppDatabase;
 import com.example.androiddb.Entities.Users.Users;
 import com.example.androiddb.Entities.Users.UsersDao;
@@ -16,6 +17,7 @@ import com.example.androiddb.R;
 
 public class Authorization extends AppCompatActivity {
     EditText Login, Password;
+    Button Auth, Reg;
     AppDatabase database;
     UsersDao usersDao;
     Thread DBThread;
@@ -29,13 +31,40 @@ public class Authorization extends AppCompatActivity {
         Login = findViewById(R.id.edtxtLogin);
         Password = findViewById(R.id.edtxtPassword);
 
-        InitDB();
+        Auth = findViewById(R.id.btnOpenForm);
+        Reg = findViewById(R.id.btnOpenReg);
+
+        GetDB();
     }
 
-    private void InitDB() {
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        RestoreClick();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        BlockClick();
+    }
+
+    private void RestoreClick() {
+        Auth.setClickable(true);
+        Reg.setClickable(true);
+    }
+
+    private void BlockClick() {
+        Auth.setClickable(false);
+        Reg.setClickable(false);
+    }
+
+    private void GetDB() {
         DBThread = new Thread(() ->
         {
-            database = App.getInstance().getDatabase();
+            database = InstanceDB.getInstance().getDatabase();
             usersDao = database.usersDao();
         });
         DBThread.start();
@@ -45,12 +74,6 @@ public class Authorization extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        ClearFields();
     }
 
     public void OpenMainForm(View view)
@@ -70,7 +93,6 @@ public class Authorization extends AppCompatActivity {
             return;
 
         LogIn(user.getRole());
-
     }
 
     boolean CheckFields(String login, String password)
@@ -129,11 +151,6 @@ public class Authorization extends AppCompatActivity {
             intent.putExtra("Role", role);
 
         startActivity(intent);
-    }
-
-    private void ClearFields() {
-        Login.setText("");
-        Password.setText("");
     }
 
     public void OpenReg(View view)

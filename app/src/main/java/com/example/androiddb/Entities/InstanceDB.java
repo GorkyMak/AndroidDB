@@ -7,14 +7,14 @@ import androidx.room.Room;
 import com.example.androiddb.Entities.Users.Users;
 import com.example.androiddb.Entities.Users.UsersDao;
 
-public class App extends Application {
-    public static App instance;
+public class InstanceDB extends Application {
+    public static InstanceDB instance;
     AppDatabase database;
     UsersDao usersDao;
     Thread DBThread;
     int ExistRecords;
 
-    public static App getInstance() {
+    public static InstanceDB getInstance() {
         return instance;
     }
 
@@ -26,11 +26,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        instance = this;
-        database = Room.databaseBuilder(this, AppDatabase.class,"database")
-                .build();
-
         InitDB();
+
+        GetDB();
 
         if (!CheckEmptyUsers())
             return;
@@ -39,6 +37,12 @@ public class App extends Application {
     }
 
     private void InitDB() {
+        instance = this;
+        database = Room.databaseBuilder(this, AppDatabase.class,"database")
+                .build();
+    }
+
+    private void GetDB() {
         DBThread = new Thread(() ->
         {
             usersDao = database.usersDao();

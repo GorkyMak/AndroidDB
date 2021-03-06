@@ -11,74 +11,68 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/TVInput"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Введите данные:"
                 android:textSize="18sp"
                 android:textColor="@color/black"
                 android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/edtxtLogin" />
+                android:layout_gravity="center_horizontal" />
 
             <EditText
                 android:id="@+id/edtxtLogin"
                 android:layout_width="match_parent"
                 style="@style/EditText"
-                android:hint="Логин"
-                app:layout_constraintTop_toBottomOf="@+id/TVInput"/>
+                android:hint="Логин"/>
 
             <EditText
                 android:id="@+id/edtxtPassword"
                 android:layout_width="match_parent"
                 style="@style/EditText"
                 android:inputType="textPassword"
-                android:hint="Пароль"
-                app:layout_constraintTop_toBottomOf="@+id/edtxtLogin"/>
+                android:hint="Пароль"/>
 
             <EditText
                 android:id="@+id/edtxtRepeatPassword"
                 android:layout_width="match_parent"
                 style="@style/EditText"
                 android:inputType="textPassword"
-                android:hint="Повтор пароля"
-                app:layout_constraintTop_toBottomOf="@+id/edtxtPassword"/>
+                android:hint="Повтор пароля"/>
 
             <EditText
                 android:id="@+id/edtxtPhone"
                 android:layout_width="match_parent"
                 style="@style/EditText"
                 android:inputType="phone"
-                android:hint="Телефон"
-                app:layout_constraintTop_toBottomOf="@+id/edtxtRepeatPassword"/>
+                android:hint="Телефон"/>
 
             <EditText
                 android:id="@+id/edtxtEmail"
                 android:layout_width="match_parent"
                 style="@style/EditText"
                 android:inputType="textEmailAddress"
-                android:hint="Электронная почта"
-                app:layout_constraintTop_toBottomOf="@+id/edtxtPhone"/>
+                android:hint="Электронная почта"/>
 
             <EditText
                 android:id="@+id/edtxtLastName"
                 android:layout_width="match_parent"
                 style="@style/EditText"
                 android:hint="Фамилия"
-                app:layout_constraintTop_toBottomOf="@+id/edtxtEmail"/>
+                android:inputType="textPersonName"/>
 
             <EditText
                 android:id="@+id/edtxtFirstName"
                 android:layout_width="match_parent"
                 style="@style/EditText"
                 android:hint="Имя"
-                app:layout_constraintTop_toBottomOf="@+id/edtxtLastName"/>
+                android:inputType="textPersonName"/>
 
 
             <EditText
@@ -86,22 +80,32 @@
                 android:layout_width="match_parent"
                 style="@style/EditText"
                 android:hint="Отчество"
-                app:layout_constraintTop_toBottomOf="@+id/edtxtFirstName"/>
+                android:inputType="textPersonName"/>
 
             <Button
-                android:id="@+id/btnOpenForm"
+                android:id="@+id/btnReg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
                 android:layout_marginTop="10dp"
-                android:text="Зарегистрироваться"
                 android:onClick="RegUser"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtxtMiddleName"/>
+                android:layout_gravity="center_horizontal"
+                android:text="Зарегистрироваться"
+                android:textSize="16sp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:onClick="Cancel"
+                android:layout_gravity="center_horizontal"
+                android:text="Отмена"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
     </ScrollView>
+
+
 
 </LinearLayout>
