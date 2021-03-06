@@ -1,11 +1,11 @@
-package com.example.androiddb.Entities;
+package com.example.androiddb.Database;
 
 import android.app.Application;
 
 import androidx.room.Room;
 
-import com.example.androiddb.Entities.Users.Users;
-import com.example.androiddb.Entities.Users.UsersDao;
+import com.example.androiddb.Database.Entities.Users.Users;
+import com.example.androiddb.Database.Entities.Users.UsersDao;
 
 public class InstanceDB extends Application {
     public static InstanceDB instance;

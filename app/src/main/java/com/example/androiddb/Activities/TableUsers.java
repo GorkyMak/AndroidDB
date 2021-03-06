@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androiddb.Entities.InstanceDB;
-import com.example.androiddb.Entities.AppDatabase;
-import com.example.androiddb.Entities.Users.Users;
-import com.example.androiddb.Entities.Users.UsersDao;
+import com.example.androiddb.Database.InstanceDB;
+import com.example.androiddb.Database.AppDatabase;
+import com.example.androiddb.Database.Entities.Users.Users;
+import com.example.androiddb.Database.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
 import java.util.List;
@@ -38,6 +38,11 @@ public class TableUsers extends AppCompatActivity {
         GetDB();
 
         FillTable();
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
     }
 
     private void GetDB() {

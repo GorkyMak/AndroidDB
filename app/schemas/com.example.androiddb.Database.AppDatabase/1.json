@@ -1,0 +1,76 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "a8788b8669b088b48373e78c5b534b57",
+    "entities": [
+      {
+        "tableName": "Users",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Login` TEXT NOT NULL, `Password` TEXT, `Phone` TEXT, `Email` TEXT, `LastName` TEXT, `FirstName` TEXT, `MiddleName` TEXT, `Role` TEXT, PRIMARY KEY(`Login`))",
+        "fields": [
+          {
+            "fieldPath": "Login",
+            "columnName": "Login",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "Password",
+            "columnName": "Password",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "Phone",
+            "columnName": "Phone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "Email",
+            "columnName": "Email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "LastName",
+            "columnName": "LastName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "FirstName",
+            "columnName": "FirstName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "MiddleName",
+            "columnName": "MiddleName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "Role",
+            "columnName": "Role",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "Login"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a8788b8669b088b48373e78c5b534b57')"
+    ]
+  }
+}

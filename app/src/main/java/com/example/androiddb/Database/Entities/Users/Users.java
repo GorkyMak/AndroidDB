@@ -1,4 +1,4 @@
-package com.example.androiddb.Entities.Users;
+package com.example.androiddb.Database.Entities.Users;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

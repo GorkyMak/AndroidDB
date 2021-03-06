@@ -5,9 +5,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androiddb.Entities.InstanceDB;
-import com.example.androiddb.Entities.AppDatabase;
-import com.example.androiddb.Entities.Users.UsersDao;
+import com.example.androiddb.Database.InstanceDB;
+import com.example.androiddb.Database.AppDatabase;
+import com.example.androiddb.Database.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
 import java.text.MessageFormat;
@@ -29,6 +29,11 @@ public class GeneralUserData extends AppCompatActivity {
         GetDB();
 
         CountUsers.setText(MessageFormat.format("{0}{1}", CountUsers.getText(), String.valueOf(CountRecords)));
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
     }
 
     private void GetDB() {

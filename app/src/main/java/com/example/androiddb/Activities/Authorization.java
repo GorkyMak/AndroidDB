@@ -9,10 +9,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androiddb.Entities.InstanceDB;
-import com.example.androiddb.Entities.AppDatabase;
-import com.example.androiddb.Entities.Users.Users;
-import com.example.androiddb.Entities.Users.UsersDao;
+import com.example.androiddb.Database.InstanceDB;
+import com.example.androiddb.Database.AppDatabase;
+import com.example.androiddb.Database.Entities.Users.Users;
+import com.example.androiddb.Database.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
 public class Authorization extends AppCompatActivity {

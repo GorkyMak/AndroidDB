@@ -1,4 +1,4 @@
-package com.example.androiddb.Entities;
+package com.example.androiddb.Database;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

@@ -1,9 +1,9 @@
-package com.example.androiddb.Entities.Users;
+package com.example.androiddb.Database.Entities.Users;
 
 import androidx.room.Dao;
 import androidx.room.Query;
 
-import com.example.androiddb.Entities.BaseDao;
+import com.example.androiddb.Database.BaseDao;
 
 import java.util.List;
 @Dao

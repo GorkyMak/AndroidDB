@@ -8,10 +8,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androiddb.Entities.InstanceDB;
-import com.example.androiddb.Entities.AppDatabase;
-import com.example.androiddb.Entities.Users.Users;
-import com.example.androiddb.Entities.Users.UsersDao;
+import com.example.androiddb.Database.InstanceDB;
+import com.example.androiddb.Database.AppDatabase;
+import com.example.androiddb.Database.Entities.Users.Users;
+import com.example.androiddb.Database.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
 public class Registration extends AppCompatActivity {
@@ -43,10 +43,22 @@ public class Registration extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        RestoreClick();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
 
         BlockClick();
+    }
+
+    private void RestoreClick() {
+        Reg.setClickable(true);
+        Cancel.setClickable(true);
     }
 
     private void BlockClick() {
@@ -71,73 +83,59 @@ public class Registration extends AppCompatActivity {
 
     public void RegUser(View view)
     {
-        String[] UserAttributes = new String[]
-            {
-                    Login.getText().toString(),
-                    Login.getHint().toString(),
 
-                    Password.getText().toString(),
-                    Password.getHint().toString(),
-
-                    RepeatPassword.getText().toString(),
-                    RepeatPassword.getHint().toString(),
-
-                    Phone.getText().toString(),
-                    Phone.getHint().toString(),
-
-                    Email.getText().toString(),
-                    Email.getHint().toString(),
-
-                    LastName.getText().toString(),
-                    LastName.getHint().toString(),
-
-                    FirstName.getText().toString(),
-                    FirstName.getHint().toString(),
-
-                    MiddleName.getText().toString(),
-                    MiddleName.getHint().toString()
-            };
-
-        if(!CheckFields(UserAttributes))
+        if(!CheckFields())
             return;
 
         if(!CheckExcistedUser())
             return;
 
-        if(!CheckRepeatPassword(UserAttributes[2], UserAttributes[4]))
+        if(!CheckRepeatPassword(Password.getText().toString(), RepeatPassword.getText().toString()))
             return;
 
-        AddNewUser(UserAttributes);
+        AddNewUser();
 
         GoBack();
     }
 
-    boolean CheckFields(String[] UserAttributes)
+    boolean CheckFields()
     {
+        EditText[] UserAttributes = new EditText[]
+                {
+                        Login,
+                        Password,
+                        RepeatPassword,
+                        Phone,
+                        Email,
+                        LastName,
+                        FirstName,
+                        MiddleName
+                };
+
         StringBuilder Fields = new StringBuilder();
 
-        for (int i = 0; i < UserAttributes.length; i += 2) {
-            if (!UserAttributes[i].equals(""))
+        for (EditText userAttribute : UserAttributes) {
+            if (!userAttribute.toString().equals(""))
                 continue;
 
             if (Fields.length() > 0)
                 Fields.append(", ");
 
-            Fields.append(UserAttributes[i+1]);
+            Fields.append(userAttribute.getTag().toString());
         }
 
-        if(Fields.length() == 0)
+        if(Fields.length() > 0)
         {
-            Runnable GetDB = () ->
-                    users = usersDao.GetByLogin(UserAttributes[0]);
-
-            DBThread = new Thread(GetDB);
-            DBThread.start();
-            return true;
+            Toast.makeText(this, "Заполните поля: " + Fields, Toast.LENGTH_SHORT).show();
+            return false;
         }
 
-        Toast.makeText(this, "Заполните поля: " + Fields, Toast.LENGTH_SHORT).show();
-        return false;
+        Runnable GetDB = () ->
+                users = usersDao.GetByLogin(Login.getText().toString());
+
+        DBThread = new Thread(GetDB);
+        DBThread.start();
+        return true;
     }
 
     boolean CheckExcistedUser()
@@ -168,16 +166,16 @@ public class Registration extends AppCompatActivity {
         return false;
     }
 
-    private void AddNewUser(String[] UserAttributes) {
+    private void AddNewUser() {
         Users user = new Users
                 (
-                        UserAttributes[0],
-                        UserAttributes[2],
-                        UserAttributes[6],
-                        UserAttributes[8],
-                        UserAttributes[10],
-                        UserAttributes[12],
-                        UserAttributes[14],
+                        Login.getText().toString(),
+                        Password.getText().toString(),
+                        Phone.getText().toString(),
+                        Email.getText().toString(),
+                        LastName.getText().toString(),
+                        FirstName.getText().toString(),
+                        MiddleName.getText().toString(),
                         "User"
                 );
 
@@ -193,7 +191,7 @@ public class Registration extends AppCompatActivity {
     }
 
     private void GoBack() {
-        onBackPressed();
+        this.finish();
     }
 
     public void Cancel(View view) {
