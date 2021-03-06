@@ -11,7 +11,7 @@ public class App extends Application {
     public static App instance;
     AppDatabase database;
     UsersDao usersDao;
-    Thread SecondThread;
+    Thread DBThread;
     int ExistRecords;
 
     public static App getInstance() {
@@ -30,28 +30,32 @@ public class App extends Application {
         database = Room.databaseBuilder(this, AppDatabase.class,"database")
                 .build();
 
-        SecondThread = new Thread(() ->
-        {
-            usersDao = database.usersDao();
+        InitDB();
 
-            ExistRecords = usersDao.GetEmptyInfo();
-        });
-        SecondThread.start();
-
-        try {
-            SecondThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (CheckEmptyUsers())
+        if (!CheckEmptyUsers())
             return;
 
         FillDB();
     }
 
+    private void InitDB() {
+        DBThread = new Thread(() ->
+        {
+            usersDao = database.usersDao();
+
+            ExistRecords = usersDao.GetEmptyInfo();
+        });
+        DBThread.start();
+
+        try {
+            DBThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private boolean CheckEmptyUsers() {
-        return ExistRecords == 1;
+        return ExistRecords == 0;
     }
 
     void FillDB()
@@ -80,12 +84,12 @@ public class App extends Application {
                         "User"
                 );
 
-        SecondThread = new Thread(() ->
+        DBThread = new Thread(() ->
             usersDao.InsertAll(Admin, wer));
-        SecondThread.start();
+        DBThread.start();
 
         try {
-            SecondThread.join();
+            DBThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

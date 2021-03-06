@@ -22,7 +22,7 @@ public class TableUsers extends AppCompatActivity {
     AppDatabase database;
     UsersDao usersDao;
     List<Users> users;
-    Thread SecondThread;
+    Thread DBThread;
     TableRow.LayoutParams layoutParams;
 
     @Override
@@ -40,17 +40,17 @@ public class TableUsers extends AppCompatActivity {
     }
 
     private void InitDB() {
-        SecondThread = new Thread(() ->
+        DBThread = new Thread(() ->
         {
             database = App.getInstance().getDatabase();
             usersDao = database.usersDao();
 
             users = usersDao.GetAll();
         });
-        SecondThread.start();
+        DBThread.start();
 
         try {
-            SecondThread.join();
+            DBThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

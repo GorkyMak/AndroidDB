@@ -18,7 +18,7 @@ public class Registration extends AppCompatActivity {
     AppDatabase database;
     UsersDao usersDao;
     Users users;
-    Thread SecondThread;
+    Thread DBThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +38,15 @@ public class Registration extends AppCompatActivity {
     }
 
     private void initDB() {
-        SecondThread = new Thread(() ->
+        DBThread = new Thread(() ->
         {
             database = App.getInstance().getDatabase();
             usersDao = database.usersDao();
         });
-        SecondThread.start();
+        DBThread.start();
 
         try {
-            SecondThread.join();
+            DBThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -114,8 +114,8 @@ public class Registration extends AppCompatActivity {
             Runnable InitDB = () ->
                     users = usersDao.GetByLogin(UserAttributes[0]);
 
-            SecondThread = new Thread(InitDB);
-            SecondThread.start();
+            DBThread = new Thread(InitDB);
+            DBThread.start();
             return true;
         }
 
@@ -135,7 +135,7 @@ public class Registration extends AppCompatActivity {
 
     private boolean FindUser() {
         try {
-            SecondThread.join();
+            DBThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -164,12 +164,12 @@ public class Registration extends AppCompatActivity {
                         "User"
                 );
 
-        SecondThread = new Thread(() ->
+        DBThread = new Thread(() ->
                 usersDao.Insert(user));
-        SecondThread.start();
+        DBThread.start();
 
         try {
-            SecondThread.join();
+            DBThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

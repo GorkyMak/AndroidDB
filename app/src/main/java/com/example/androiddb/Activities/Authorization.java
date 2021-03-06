@@ -18,7 +18,7 @@ public class Authorization extends AppCompatActivity {
     EditText Login, Password;
     AppDatabase database;
     UsersDao usersDao;
-    Thread SecondThread;
+    Thread DBThread;
     Users user;
 
     @Override
@@ -33,15 +33,15 @@ public class Authorization extends AppCompatActivity {
     }
 
     private void InitDB() {
-        SecondThread = new Thread(() ->
+        DBThread = new Thread(() ->
         {
             database = App.getInstance().getDatabase();
             usersDao = database.usersDao();
         });
-        SecondThread.start();
+        DBThread.start();
 
         try {
-            SecondThread.join();
+            DBThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -94,11 +94,11 @@ public class Authorization extends AppCompatActivity {
         Runnable UpdateUsers = () ->
             user = usersDao.GetByLogin(login);
 
-        SecondThread = new Thread(UpdateUsers);
-        SecondThread.start();
+        DBThread = new Thread(UpdateUsers);
+        DBThread.start();
 
         try {
-            SecondThread.join();
+            DBThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
