@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
+import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -17,6 +18,9 @@ import com.example.androiddb.Database.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 public class TableUsers extends AppCompatActivity {
     TableLayout Table;
@@ -37,7 +41,7 @@ public class TableUsers extends AppCompatActivity {
 
         GetDB();
 
-        FillTable();
+        getTable();
     }
 
     @Override
@@ -50,8 +54,6 @@ public class TableUsers extends AppCompatActivity {
         {
             database = InstanceDB.getInstance().getDatabase();
             usersDao = database.usersDao();
-
-            users = usersDao.GetAll();
         });
         DBThread.start();
 
@@ -60,6 +62,18 @@ public class TableUsers extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void getTable() {
+        usersDao.GetAll()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Users>>() {
+                    @Override
+                    public void accept(List<Users> Users) throws Exception {
+                        users = Users;
+                        FillTable();
+                    }
+                });
     }
 
     private void FillTable() {
@@ -123,5 +137,10 @@ public class TableUsers extends AppCompatActivity {
                 );
         layoutParams.setMargins(1, 0, 1, 2);
         return layoutParams;
+    }
+
+    public void Delete(View view) {
+        if(Table.getChildAt(1) != null)
+            Table.removeViewAt(1);
     }
 }

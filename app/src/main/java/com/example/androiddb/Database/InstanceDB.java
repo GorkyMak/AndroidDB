@@ -1,11 +1,21 @@
 package com.example.androiddb.Database;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.room.Room;
 
 import com.example.androiddb.Database.Entities.Users.Users;
 import com.example.androiddb.Database.Entities.Users.UsersDao;
+
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class InstanceDB extends Application {
     public static InstanceDB instance;
@@ -26,14 +36,10 @@ public class InstanceDB extends Application {
     public void onCreate() {
         super.onCreate();
 
+
         InitDB();
 
         GetDB();
-
-        if (!CheckEmptyUsers())
-            return;
-
-        FillDB();
     }
 
     private void InitDB() {
@@ -44,11 +50,7 @@ public class InstanceDB extends Application {
 
     private void GetDB() {
         DBThread = new Thread(() ->
-        {
-            usersDao = database.usersDao();
-
-            ExistRecords = usersDao.GetEmptyInfo();
-        });
+            usersDao = database.usersDao());
         DBThread.start();
 
         try {
@@ -56,6 +58,26 @@ public class InstanceDB extends Application {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        usersDao.GetEmptyInfo()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSingleObserver<Integer>() {
+                    @Override
+                    public void onSuccess(@NonNull Integer integer) {
+                        ExistRecords = integer;
+
+                        if (!CheckEmptyUsers())
+                            return;
+
+                        FillDB();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e("ERROR", e.getMessage());
+                    }
+                });
     }
 
     private boolean CheckEmptyUsers() {
@@ -89,7 +111,7 @@ public class InstanceDB extends Application {
                 );
 
         DBThread = new Thread(() ->
-            usersDao.InsertAll(Admin, wer));
+                usersDao.InsertAll(Admin, wer));
         DBThread.start();
 
         try {

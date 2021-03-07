@@ -1,6 +1,7 @@
 package com.example.androiddb.Activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,11 @@ import com.example.androiddb.Database.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
 import java.text.MessageFormat;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class GeneralUserData extends AppCompatActivity {
     TextView CountUsers;
@@ -28,7 +34,7 @@ public class GeneralUserData extends AppCompatActivity {
 
         GetDB();
 
-        CountUsers.setText(MessageFormat.format("{0}{1}", CountUsers.getText(), String.valueOf(CountRecords)));
+        getCount();
     }
 
     @Override
@@ -41,8 +47,6 @@ public class GeneralUserData extends AppCompatActivity {
         {
             database = InstanceDB.getInstance().getDatabase();
             usersDao = database.usersDao();
-
-            CountRecords = usersDao.GetCount();
         });
         DBThread.start();
 
@@ -51,5 +55,28 @@ public class GeneralUserData extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void getCount() {
+        usersDao.GetCount()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSingleObserver<Integer>() {
+                    @Override
+                    public void onSuccess(@NonNull Integer integer) {
+                        CountRecords = integer;
+
+                        setCountUsers();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e("ERROR", e.getMessage());
+                    }
+                });
+    }
+
+    private void setCountUsers() {
+        CountUsers.setText(MessageFormat.format("{0}{1}", CountUsers.getText(), String.valueOf(CountRecords)));
     }
 }

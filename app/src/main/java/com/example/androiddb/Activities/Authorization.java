@@ -2,6 +2,7 @@ package com.example.androiddb.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,14 @@ import com.example.androiddb.Database.AppDatabase;
 import com.example.androiddb.Database.Entities.Users.Users;
 import com.example.androiddb.Database.Entities.Users.UsersDao;
 import com.example.androiddb.R;
+
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableMaybeObserver;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 public class Authorization extends AppCompatActivity {
     EditText Login, Password;
@@ -84,15 +93,7 @@ public class Authorization extends AppCompatActivity {
             return;
         }
 
-        FindUser(login);
-
-        if(!CheckExistUser(user))
-            return;
-
-        if(!CheckPassword(user.getPassword(), password))
-            return;
-
-        LogIn(user.getRole());
+        FindUser(login, password);
     }
 
     boolean CheckFields(String login, String password)
@@ -112,27 +113,31 @@ public class Authorization extends AppCompatActivity {
         return true;
     }
 
-    private void FindUser(String login) {
-        Runnable UpdateUsers = () ->
-            user = usersDao.GetByLogin(login);
+    private void FindUser(String login, String password) {
+        usersDao.GetByLogin(login)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableMaybeObserver<Users>() {
+                    @Override
+                    public void onSuccess(@NonNull Users users) {
+                        user = users;
 
-        DBThread = new Thread(UpdateUsers);
-        DBThread.start();
+                        if(!CheckPassword(user.getPassword(), password))
+                            return;
 
-        try {
-            DBThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+                        LogIn(user.getRole());
+                    }
 
-    boolean CheckExistUser(Users user)
-    {
-        if(user != null)
-            return true;
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e("ERROR", e.getMessage());
+                    }
 
-        Toast.makeText(this, "Пользователь с таким логином не найден", Toast.LENGTH_LONG).show();
-        return false;
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(Authorization.this, "Пользователь с таким логином не найден", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     boolean CheckPassword(String userPassword, String password)
@@ -140,7 +145,7 @@ public class Authorization extends AppCompatActivity {
         if(userPassword.equals(password))
             return true;
 
-        Toast.makeText(this, "Неверный пароль", Toast.LENGTH_LONG).show();
+        Toast.makeText(Authorization.this, "Неверный пароль", Toast.LENGTH_LONG).show();
         return false;
     }
 

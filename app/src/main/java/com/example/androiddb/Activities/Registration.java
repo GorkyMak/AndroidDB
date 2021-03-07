@@ -1,6 +1,7 @@
 package com.example.androiddb.Activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,12 +15,17 @@ import com.example.androiddb.Database.Entities.Users.Users;
 import com.example.androiddb.Database.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableMaybeObserver;
+import io.reactivex.schedulers.Schedulers;
+
 public class Registration extends AppCompatActivity {
     EditText Login, Password, RepeatPassword, Phone, Email, LastName, FirstName, MiddleName;
     Button Reg, Cancel;
     AppDatabase database;
     UsersDao usersDao;
-    Users users;
+    Users user;
     Thread DBThread;
 
     @Override
@@ -83,22 +89,12 @@ public class Registration extends AppCompatActivity {
 
     public void RegUser(View view)
     {
+        CheckFields();
 
-        if(!CheckFields())
-            return;
-
-        if(!CheckExcistedUser())
-            return;
-
-        if(!CheckRepeatPassword(Password.getText().toString(), RepeatPassword.getText().toString()))
-            return;
-
-        AddNewUser();
-
-        GoBack();
+        FindUser();
     }
 
-    boolean CheckFields()
+    void CheckFields()
     {
         EditText[] UserAttributes = new EditText[]
                 {
@@ -115,47 +111,49 @@ public class Registration extends AppCompatActivity {
         StringBuilder Fields = new StringBuilder();
 
         for (EditText userAttribute : UserAttributes) {
-            if (!userAttribute.toString().equals(""))
+            if (!userAttribute.getText().toString().equals(""))
                 continue;
 
             if (Fields.length() > 0)
                 Fields.append(", ");
 
-            Fields.append(userAttribute.getTag().toString());
+            Fields.append(userAttribute.getHint().toString());
         }
 
         if(Fields.length() > 0)
         {
             Toast.makeText(this, "Заполните поля: " + Fields, Toast.LENGTH_SHORT).show();
-            return false;
+            return;
         }
 
-        Runnable GetDB = () ->
-                users = usersDao.GetByLogin(Login.getText().toString());
-
-        DBThread = new Thread(GetDB);
-        DBThread.start();
-        return true;
     }
 
-    boolean CheckExcistedUser()
-    {
-        if(!FindUser())
-            return true;
+    private void FindUser() {
+        usersDao.GetByLogin(Login.getText().toString())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableMaybeObserver<Users>() {
+                    @Override
+                    public void onSuccess(@NonNull Users users) {
+                        Toast.makeText(Registration.this, "Пользователь с таким логином уже существует",
+                                Toast.LENGTH_LONG).show();
+                    }
 
-        Toast.makeText(this, "Пользователь с таким логином уже существует",
-                Toast.LENGTH_LONG).show();
-        return false;
-    }
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e("ERROR", e.getMessage());
+                    }
 
-    private boolean FindUser() {
-        try {
-            DBThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+                    @Override
+                    public void onComplete() {
+                        if(!CheckRepeatPassword(Password.getText().toString(), RepeatPassword.getText().toString()))
+                            return;
 
-        return users != null;
+                        AddNewUser();
+
+                        GoBack();
+                    }
+                });
     }
 
     private boolean CheckRepeatPassword(String password, String repeatPassword) {
