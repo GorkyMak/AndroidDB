@@ -25,7 +25,6 @@ public class Registration extends AppCompatActivity {
     Button Reg, Cancel;
     AppDatabase database;
     UsersDao usersDao;
-    Users user;
     Thread DBThread;
 
     @Override
@@ -89,12 +88,13 @@ public class Registration extends AppCompatActivity {
 
     public void RegUser(View view)
     {
-        CheckFields();
+        if(!CheckFields())
+            return;
 
         FindUser();
     }
 
-    void CheckFields()
+    boolean CheckFields()
     {
         EditText[] UserAttributes = new EditText[]
                 {
@@ -123,9 +123,9 @@ public class Registration extends AppCompatActivity {
         if(Fields.length() > 0)
         {
             Toast.makeText(this, "Заполните поля: " + Fields, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
-
+        return true;
     }
 
     private void FindUser() {
@@ -135,13 +135,13 @@ public class Registration extends AppCompatActivity {
                 .subscribe(new DisposableMaybeObserver<Users>() {
                     @Override
                     public void onSuccess(@NonNull Users users) {
-                        Toast.makeText(Registration.this, "Пользователь с таким логином уже существует",
+                        Toast.makeText(Registration.this, "Пользователь "+ users.getLogin() +" уже существует",
                                 Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.e("ERROR", e.getMessage());
+                        Log.e("ERROR-GetByLogin", e.getMessage());
                     }
 
                     @Override

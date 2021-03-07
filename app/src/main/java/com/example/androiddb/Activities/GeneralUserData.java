@@ -71,7 +71,7 @@ public class GeneralUserData extends AppCompatActivity {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.e("ERROR", e.getMessage());
+                        Log.e("ERROR-GetCount", e.getMessage());
                     }
                 });
     }

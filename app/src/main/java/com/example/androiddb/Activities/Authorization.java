@@ -10,19 +10,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androiddb.Database.InstanceDB;
 import com.example.androiddb.Database.AppDatabase;
 import com.example.androiddb.Database.Entities.Users.Users;
 import com.example.androiddb.Database.Entities.Users.UsersDao;
+import com.example.androiddb.Database.InstanceDB;
 import com.example.androiddb.R;
-
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subscribers.DisposableSubscriber;
 
 public class Authorization extends AppCompatActivity {
     EditText Login, Password;
@@ -130,12 +127,13 @@ public class Authorization extends AppCompatActivity {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.e("ERROR", e.getMessage());
+                        Log.e("ERROR-GetByLogin", e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        Toast.makeText(Authorization.this, "Пользователь с таким логином не найден", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Authorization.this, "Пользователь с таким логином не найден",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
     }

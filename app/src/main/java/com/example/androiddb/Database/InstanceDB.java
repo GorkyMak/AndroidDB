@@ -8,12 +8,9 @@ import androidx.room.Room;
 import com.example.androiddb.Database.Entities.Users.Users;
 import com.example.androiddb.Database.Entities.Users.UsersDao;
 
-import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -40,6 +37,8 @@ public class InstanceDB extends Application {
         InitDB();
 
         GetDB();
+
+        GetEmptyInfo();
     }
 
     private void InitDB() {
@@ -59,6 +58,9 @@ public class InstanceDB extends Application {
             e.printStackTrace();
         }
 
+    }
+
+    private void GetEmptyInfo() {
         usersDao.GetEmptyInfo()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -75,7 +77,7 @@ public class InstanceDB extends Application {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.e("ERROR", e.getMessage());
+                        Log.e("ERROR-GetEmptyInfo", e.getMessage());
                     }
                 });
     }

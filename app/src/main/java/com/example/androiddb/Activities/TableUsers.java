@@ -11,16 +11,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androiddb.Database.InstanceDB;
 import com.example.androiddb.Database.AppDatabase;
 import com.example.androiddb.Database.Entities.Users.Users;
 import com.example.androiddb.Database.Entities.Users.UsersDao;
+import com.example.androiddb.Database.InstanceDB;
 import com.example.androiddb.R;
 
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 
 public class TableUsers extends AppCompatActivity {
     TableLayout Table;
@@ -67,12 +66,9 @@ public class TableUsers extends AppCompatActivity {
     private void getTable() {
         usersDao.GetAll()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Users>>() {
-                    @Override
-                    public void accept(List<Users> Users) throws Exception {
-                        users = Users;
-                        FillTable();
-                    }
+                .subscribe(Users -> {
+                    users = Users;
+                    FillTable();
                 });
     }
 
