@@ -3,7 +3,7 @@
     package="com.example.androiddb">
 
     <application
-        android:name=".Database.InstanceDB"
+        android:name=".Database.Repository"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"

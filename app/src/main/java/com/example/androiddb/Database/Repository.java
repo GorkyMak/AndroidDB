@@ -10,18 +10,17 @@ import com.example.androiddb.Database.Entities.Users.UsersDao;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class InstanceDB extends Application {
-    public static InstanceDB instance;
+public class Repository extends Application {
+    public static Repository instance;
     AppDatabase database;
     UsersDao usersDao;
     Thread DBThread;
     int ExistRecords;
 
-    public static InstanceDB getInstance() {
+    public static Repository getInstance() {
         return instance;
     }
 
@@ -32,7 +31,6 @@ public class InstanceDB extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
 
         InitDB();
 
@@ -57,7 +55,6 @@ public class InstanceDB extends Application {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     private void GetEmptyInfo() {

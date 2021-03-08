@@ -14,12 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.androiddb.Database.AppDatabase;
 import com.example.androiddb.Database.Entities.Users.Users;
 import com.example.androiddb.Database.Entities.Users.UsersDao;
-import com.example.androiddb.Database.InstanceDB;
+import com.example.androiddb.Database.Repository;
 import com.example.androiddb.R;
 
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public class TableUsers extends AppCompatActivity {
     TableLayout Table;
@@ -28,6 +30,7 @@ public class TableUsers extends AppCompatActivity {
     List<Users> users;
     Thread DBThread;
     TableRow.LayoutParams layoutParams;
+    CompositeDisposable DisposeBag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +41,17 @@ public class TableUsers extends AppCompatActivity {
 
         layoutParams = getLayoutParams();
 
+        DisposeBag = new CompositeDisposable();
+
         GetDB();
 
         getTable();
+    }
+
+    @Override
+    protected void onDestroy() {
+        DisposeBag.clear();
+        super.onDestroy();
     }
 
     @Override
@@ -51,7 +62,7 @@ public class TableUsers extends AppCompatActivity {
     private void GetDB() {
         DBThread = new Thread(() ->
         {
-            database = InstanceDB.getInstance().getDatabase();
+            database = Repository.getInstance().getDatabase();
             usersDao = database.usersDao();
         });
         DBThread.start();
@@ -64,12 +75,13 @@ public class TableUsers extends AppCompatActivity {
     }
 
     private void getTable() {
-        usersDao.GetAll()
+        Disposable disposable = usersDao.GetAll()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(Users -> {
                     users = Users;
                     FillTable();
                 });
+        DisposeBag.add(disposable);
     }
 
     private void FillTable() {

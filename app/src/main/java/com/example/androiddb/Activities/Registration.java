@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.androiddb.Database.InstanceDB;
+import com.example.androiddb.Database.Repository;
 import com.example.androiddb.Database.AppDatabase;
 import com.example.androiddb.Database.Entities.Users.Users;
 import com.example.androiddb.Database.Entities.Users.UsersDao;
@@ -74,7 +74,7 @@ public class Registration extends AppCompatActivity {
     private void GetDB() {
         DBThread = new Thread(() ->
         {
-            database = InstanceDB.getInstance().getDatabase();
+            database = Repository.getInstance().getDatabase();
             usersDao = database.usersDao();
         });
         DBThread.start();
