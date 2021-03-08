@@ -15,6 +15,7 @@ import com.example.androiddb.Database.Entities.Users.Users;
 import com.example.androiddb.Database.Entities.Users.UsersDao;
 import com.example.androiddb.R;
 
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableMaybeObserver;
@@ -25,7 +26,6 @@ public class Registration extends AppCompatActivity {
     Button Reg, Cancel;
     AppDatabase database;
     UsersDao usersDao;
-    Thread DBThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +72,8 @@ public class Registration extends AppCompatActivity {
     }
 
     private void GetDB() {
-        DBThread = new Thread(() ->
-        {
             database = Repository.getInstance().getDatabase();
             usersDao = database.usersDao();
-        });
-        DBThread.start();
-
-        try {
-            DBThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public void RegUser(View view)
@@ -177,15 +167,9 @@ public class Registration extends AppCompatActivity {
                         "User"
                 );
 
-        DBThread = new Thread(() ->
-                usersDao.Insert(user));
-        DBThread.start();
-
-        try {
-            DBThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Completable.fromAction(() -> usersDao.Insert(user))
+                .subscribeOn(Schedulers.newThread())
+                .subscribe();
     }
 
     private void GoBack() {

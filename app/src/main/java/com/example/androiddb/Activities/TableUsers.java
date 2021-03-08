@@ -28,7 +28,6 @@ public class TableUsers extends AppCompatActivity {
     AppDatabase database;
     UsersDao usersDao;
     List<Users> users;
-    Thread DBThread;
     TableRow.LayoutParams layoutParams;
     CompositeDisposable DisposeBag;
 
@@ -60,18 +59,8 @@ public class TableUsers extends AppCompatActivity {
     }
 
     private void GetDB() {
-        DBThread = new Thread(() ->
-        {
             database = Repository.getInstance().getDatabase();
             usersDao = database.usersDao();
-        });
-        DBThread.start();
-
-        try {
-            DBThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private void getTable() {

@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         style="@style/EditText"
         android:hint="Логин"
+        android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/edtxtPassword"
         app:layout_constraintTop_toTopOf="parent"/>
 

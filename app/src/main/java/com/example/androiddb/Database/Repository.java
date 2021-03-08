@@ -1,24 +1,17 @@
 package com.example.androiddb.Database;
 
 import android.app.Application;
-import android.util.Log;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 
 import androidx.room.Room;
-
-import com.example.androiddb.Database.Entities.Users.Users;
-import com.example.androiddb.Database.Entities.Users.UsersDao;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 public class Repository extends Application {
     public static Repository instance;
     AppDatabase database;
-    UsersDao usersDao;
     Thread DBThread;
-    int ExistRecords;
 
     public static Repository getInstance() {
         return instance;
@@ -33,21 +26,23 @@ public class Repository extends Application {
         super.onCreate();
 
         InitDB();
-
-        GetDB();
-
-        GetEmptyInfo();
     }
 
     private void InitDB() {
+        if(database != null)
+            return;
+
         instance = this;
-        database = Room.databaseBuilder(this, AppDatabase.class,"database")
-                .build();
-    }
-
-    private void GetDB() {
         DBThread = new Thread(() ->
-            usersDao = database.usersDao());
+                database = Room.databaseBuilder(this, AppDatabase.class,"database")
+                        .addCallback(new RoomDatabase.Callback() {
+                            @Override
+                            public void onCreate(@androidx.annotation.NonNull SupportSQLiteDatabase db) {
+                                super.onCreate(db);
+                                FillDB(db);
+                            }
+                        })
+                        .build());
         DBThread.start();
 
         try {
@@ -57,66 +52,30 @@ public class Repository extends Application {
         }
     }
 
-    private void GetEmptyInfo() {
-        usersDao.GetEmptyInfo()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableSingleObserver<Integer>() {
-                    @Override
-                    public void onSuccess(@NonNull Integer integer) {
-                        ExistRecords = integer;
-
-                        if (!CheckEmptyUsers())
-                            return;
-
-                        FillDB();
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.e("ERROR-GetEmptyInfo", e.getMessage());
-                    }
-                });
-    }
-
-    private boolean CheckEmptyUsers() {
-        return ExistRecords == 0;
-    }
-
-    void FillDB()
+    void FillDB(SupportSQLiteDatabase db)
     {
-        Users Admin = new Users
-                (
-                        "Admin",
-                        "123",
-                        "7(764)059-44-98",
-                        "fodatipu-5632@yopmail.com",
-                        "Admin",
-                        "Admin",
-                        "Admin",
-                        "Admin"
-                );
+        ContentValues Admin = new ContentValues();
+        Admin.put("Login", "Admin");
+        Admin.put("Password", "123");
+        Admin.put("Phone", "7(764)059-44-98");
+        Admin.put("Email", "fodatipu-5632@yopmail.com");
+        Admin.put("LastName", "Admin");
+        Admin.put("FirstName", "Admin");
+        Admin.put("MiddleName", "Admin");
+        Admin.put("Role", "Admin");
 
-        Users wer = new Users
-                (
-                        "wer",
-                        "124",
-                        "1(3685)549-50-09",
-                        "elinnyllabe-3318@yopmail.com",
-                        "wer",
-                        "wer",
-                        "wer",
-                        "User"
-                );
+        db.insert("Users", SQLiteDatabase.CONFLICT_ABORT, Admin);
 
-        DBThread = new Thread(() ->
-                usersDao.InsertAll(Admin, wer));
-        DBThread.start();
+        ContentValues wer = new ContentValues();
+        wer.put("Login", "wer");
+        wer.put("Password", "124");
+        wer.put("Phone", "1(3685)549-50-09");
+        wer.put("Email", "elinnyllabe-3318@yopmail.com");
+        wer.put("LastName", "wer");
+        wer.put("FirstName", "wer");
+        wer.put("MiddleName", "wer");
+        wer.put("Role", "User");
 
-        try {
-            DBThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        db.insert("Users", SQLiteDatabase.CONFLICT_ABORT, wer);
     }
 }

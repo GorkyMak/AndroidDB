@@ -16,8 +16,10 @@ import com.example.androiddb.Database.Entities.Users.UsersDao;
 import com.example.androiddb.Database.Repository;
 import com.example.androiddb.R;
 
+import io.reactivex.MaybeObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -26,7 +28,6 @@ public class Authorization extends AppCompatActivity {
     Button Auth, Reg;
     AppDatabase database;
     UsersDao usersDao;
-    Thread DBThread;
     Users user;
 
     @Override
@@ -68,18 +69,8 @@ public class Authorization extends AppCompatActivity {
     }
 
     private void GetDB() {
-        DBThread = new Thread(() ->
-        {
             database = Repository.getInstance().getDatabase();
             usersDao = database.usersDao();
-        });
-        DBThread.start();
-
-        try {
-            DBThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public void OpenMainForm(View view)
@@ -114,7 +105,11 @@ public class Authorization extends AppCompatActivity {
         usersDao.GetByLogin(login)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableMaybeObserver<Users>() {
+                .subscribe(new MaybeObserver<Users>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                    }
+
                     @Override
                     public void onSuccess(@NonNull Users users) {
                         user = users;
@@ -128,6 +123,7 @@ public class Authorization extends AppCompatActivity {
                     @Override
                     public void onError(@NonNull Throwable e) {
                         Log.e("ERROR-GetByLogin", e.getMessage());
+
                     }
 
                     @Override

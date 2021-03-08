@@ -30,6 +30,7 @@
                 android:id="@+id/edtxtLogin"
                 android:layout_width="match_parent"
                 style="@style/EditText"
+                android:inputType="textPersonName"
                 android:hint="Логин"/>
 
             <EditText

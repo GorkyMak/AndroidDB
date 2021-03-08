@@ -23,7 +23,6 @@ public class GeneralUserData extends AppCompatActivity {
     AppDatabase database;
     UsersDao usersDao;
     int CountRecords;
-    Thread DBThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +42,8 @@ public class GeneralUserData extends AppCompatActivity {
     }
 
     private void GetDB() {
-        DBThread = new Thread(() ->
-        {
             database = Repository.getInstance().getDatabase();
             usersDao = database.usersDao();
-        });
-        DBThread.start();
-
-        try {
-            DBThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private void getCount() {

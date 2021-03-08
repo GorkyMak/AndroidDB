@@ -5,6 +5,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Update;
 
+import io.reactivex.Completable;
+
 @Dao
 public interface BaseDao<T> {
     @Insert
