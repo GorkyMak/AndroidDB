@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a8788b8669b088b48373e78c5b534b57",
+    "identityHash": "a2eab4f1459fc2ddb67b890c7662f97b",
     "entities": [
       {
         "tableName": "Users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Login` TEXT NOT NULL, `Password` TEXT, `Phone` TEXT, `Email` TEXT, `LastName` TEXT, `FirstName` TEXT, `MiddleName` TEXT, `Role` TEXT, PRIMARY KEY(`Login`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Login` TEXT NOT NULL, `Password` TEXT NOT NULL, `Phone` TEXT NOT NULL, `Email` TEXT NOT NULL, `LastName` TEXT NOT NULL, `FirstName` TEXT NOT NULL, `MiddleName` TEXT NOT NULL, `Role` TEXT NOT NULL, PRIMARY KEY(`Login`))",
         "fields": [
           {
             "fieldPath": "Login",
@@ -18,43 +18,43 @@
             "fieldPath": "Password",
             "columnName": "Password",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "Phone",
             "columnName": "Phone",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "Email",
             "columnName": "Email",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "LastName",
             "columnName": "LastName",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "FirstName",
             "columnName": "FirstName",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "MiddleName",
             "columnName": "MiddleName",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "Role",
             "columnName": "Role",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -70,7 +70,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a8788b8669b088b48373e78c5b534b57')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a2eab4f1459fc2ddb67b890c7662f97b')"
     ]
   }
 }

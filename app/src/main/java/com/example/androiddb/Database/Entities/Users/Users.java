@@ -9,6 +9,7 @@ public class Users {
     @PrimaryKey
     @NonNull
     String Login;
+    @NonNull
     String Password, Phone, Email, LastName, FirstName, MiddleName, Role;
 
 
