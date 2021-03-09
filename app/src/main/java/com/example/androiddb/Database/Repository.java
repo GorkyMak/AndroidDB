@@ -8,10 +8,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import io.reactivex.Completable;
+import io.reactivex.schedulers.Schedulers;
+
 public class Repository extends Application {
     public static Repository instance;
     AppDatabase database;
-    Thread DBThread;
 
     public static Repository getInstance() {
         return instance;
@@ -33,23 +35,20 @@ public class Repository extends Application {
             return;
 
         instance = this;
-        DBThread = new Thread(() ->
-                database = Room.databaseBuilder(this, AppDatabase.class,"database")
-                        .addCallback(new RoomDatabase.Callback() {
-                            @Override
-                            public void onCreate(@androidx.annotation.NonNull SupportSQLiteDatabase db) {
-                                super.onCreate(db);
-                                FillDB(db);
-                            }
-                        })
-                        .build());
-        DBThread.start();
-
-        try {
-            DBThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Completable.fromAction
+                (
+                    () -> database = Room.databaseBuilder(this, AppDatabase.class,"database")
+                    .addCallback(new RoomDatabase.Callback() {
+                        @Override
+                        public void onCreate(@androidx.annotation.NonNull SupportSQLiteDatabase db) {
+                            super.onCreate(db);
+                            FillDB(db);
+                        }
+                    })
+                    .build()
+                )
+                .subscribeOn(Schedulers.newThread())
+                .subscribe();
     }
 
     void FillDB(SupportSQLiteDatabase db)
@@ -64,7 +63,7 @@ public class Repository extends Application {
         Admin.put("MiddleName", "Admin");
         Admin.put("Role", "Admin");
 
-        db.insert("Users", SQLiteDatabase.CONFLICT_ABORT, Admin);
+        db.insert("Users", SQLiteDatabase.CONFLICT_NONE, Admin);
 
         ContentValues wer = new ContentValues();
         wer.put("Login", "wer");
@@ -76,6 +75,6 @@ public class Repository extends Application {
         wer.put("MiddleName", "wer");
         wer.put("Role", "User");
 
-        db.insert("Users", SQLiteDatabase.CONFLICT_ABORT, wer);
+        db.insert("Users", SQLiteDatabase.CONFLICT_NONE, wer);
     }
 }

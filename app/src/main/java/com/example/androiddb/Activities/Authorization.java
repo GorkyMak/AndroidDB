@@ -16,10 +16,8 @@ import com.example.androiddb.Database.Entities.Users.UsersDao;
 import com.example.androiddb.Database.Repository;
 import com.example.androiddb.R;
 
-import io.reactivex.MaybeObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -105,11 +103,7 @@ public class Authorization extends AppCompatActivity {
         usersDao.GetByLogin(login)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MaybeObserver<Users>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                    }
-
+                .subscribe(new DisposableMaybeObserver<Users>() {
                     @Override
                     public void onSuccess(@NonNull Users users) {
                         user = users;
